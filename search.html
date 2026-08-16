@@ -30,7 +30,9 @@
   --shadow-sm:0 1px 3px rgba(28,43,54,0.06);--shadow-md:0 4px 20px rgba(28,43,54,0.08);
 }
 html{font-size:18px;}
-body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);-webkit-font-smoothing:antialiased;}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;}
+.results-wrap{flex:1 0 auto;}
+footer{margin-top:auto;}
 a{color:inherit;}
 /* Nav */
 nav{position:sticky;top:0;z-index:50;background:rgba(254,253,251,0.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(28,43,54,0.07);}
