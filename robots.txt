@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /claim.html
+Disallow: /claim
 
 Sitemap: https://grandtraversebuilders.com/sitemap.xml
 
