@@ -4,9 +4,12 @@ Static SEO directory website (Northwest Michigan builders directory). See `READM
 
 ## Cursor Cloud specific instructions
 
-- This is a pure static site: plain HTML, `style.css`, and vanilla JS (`project.js`). There is no build step, no package manager, no lockfile, and no backend. There is nothing to compile and no dependencies to install.
-- Run it with any static file server from the repo root. Canonical command (per `README.md`): `npx serve .` (serves on http://localhost:3000). `python3 -m http.server 3000` also works — both Node 22 and Python 3 are available.
-- Internal links use `.html` paths (e.g. `/business/<slug>.html`), so both servers work. Note: `npx serve` additionally 301-redirects `.html` URLs to extensionless "clean" URLs; this is expected and transparent in a browser. `python3 -m http.server` serves the `.html` paths directly without redirects but does NOT serve clean/extensionless URLs.
-- `npx serve` fetches the `serve` package from npm on first use (needs network). If offline, use `python3 -m http.server` instead, which needs no downloads.
-- There are no lint, test, or build commands — this repo has no such tooling. "Running" the app just means serving the files and opening them in a browser.
-- Core client-side functionality lives in `project.js`: favorites (localStorage key `nwmi_favorites`) and the "Plan My Build" planner (localStorage key `nwmi_project`) on `/plan-my-build.html`. To sanity-check changes, exercise the planner and favorites in the browser; there is no automated test harness.
+- Mostly a static site (plain HTML + vanilla JS) with one dynamic piece: a Cloudflare Pages Function at `functions/api/claim.js` (the claim form). No build step, no package manager, no lockfile. Nothing to compile; no dependencies to install.
+- Two ways to run locally from the repo root:
+  - Static only: `npx serve .` (http://localhost:3000) or `python3 -m http.server 3000`. Fine for HTML/CSS/JS work, but `/api/claim` will 404 and the `_headers` rules do not apply.
+  - Full (with the claim backend + `_headers`): `npx wrangler pages dev . --port 8788`. Use this to test the claim form end-to-end. Both Node 22 and Python 3 are available.
+- Clean URLs: the site is served at extensionless URLs (`/business/<slug>`). `npx serve` and Cloudflare Pages both 301-redirect `/x.html` → `/x`. Internal links still use `.html` (they redirect fine). Any code that reads the current URL must NOT assume a `.html` suffix (this caused the favorites Save-button bug).
+- `project.js` is the SINGLE source of truth for planner/favorites/search JS. Every page loads `<script src="/project.js" defer>`; pages no longer inline it, so JS changes only need to happen in `project.js`. `style.css` is currently unused (no page links it) — edit the inline `<style>` blocks or `project.js`, not `style.css`.
+- Generated file: `search-index.json` powers `/search`. Regenerate it after directory data changes with `python3 scripts/build_search_index.py` (it is derived from the `businesses` dataset embedded in `index.html`). The other `scripts/*.py` are idempotent transforms (SEO/URL cleanup, https upgrade, etc.) that have already been applied; re-running them is safe.
+- Claim function env vars (all optional, set in the Pages dashboard): `RESEND_API_KEY` + `CLAIM_NOTIFY_TO` + `CLAIM_NOTIFY_FROM` (email via Resend), `CLAIM_WEBHOOK_URL` (forward JSON), `TURNSTILE_SECRET` (spam check). With none set, the function validates, logs, and returns success so the form works out of the box.
+- There are no lint/test/build commands — no such tooling exists. Sanity-check by serving and exercising favorites, the "Plan My Build" planner (localStorage keys `nwmi_favorites` / `nwmi_project`), `/search`, and the claim form in a browser.
