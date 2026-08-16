@@ -51,8 +51,7 @@ function getPageType(){
   return 'other';
 }
 function getCurrentBusinessSlug(){
-  const h=window.location.pathname+window.location.href;
-  const m=h.match(/business\/([^/.?#]+)\.html/);
+  const m=window.location.pathname.match(/\/business\/([^/]+?)(?:\.html)?\/?$/);
   return m?m[1]:null;
 }
 function getCurrentBusinessName(){
