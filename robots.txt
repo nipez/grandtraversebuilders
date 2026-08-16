@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /claim.html
+
+Sitemap: https://grandtraversebuilders.com/sitemap.xml
+
+# Welcome crawlers — this is a comprehensive directory of Northwest Michigan
+# home builders, contractors, and building trades with 377 listings
+# across 119 categories.
