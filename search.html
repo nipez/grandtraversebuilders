@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J2WCDRKR73"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-J2WCDRKR73');</script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><link rel="icon" href="/favicon.svg" type="image/svg+xml"/><meta name="theme-color" content="#1C2B36"/>
+<meta name="robots" content="noindex,follow"/>
+<title>Search Builders &amp; Trades — Grand Traverse Builders</title>
+<meta content="Search 377 home builders, contractors and skilled trades across Northwest Michigan. Filter by trade and city." name="description"/>
+<link rel="canonical" href="https://grandtraversebuilders.com/search"/>
+<meta property="og:title" content="Search Builders &amp; Trades — Grand Traverse Builders"/>
+<meta property="og:description" content="Search 377 home builders, contractors and skilled trades across Northwest Michigan. Filter by trade and city."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://grandtraversebuilders.com/search"/>
+<meta property="og:site_name" content="Grand Traverse Builders"/>
+<meta property="og:image" content="https://grandtraversebuilders.com/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://grandtraversebuilders.com/og-image.png"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --slate:#1C2B36;--slate-deep:#0E1920;--slate-mid:#253A48;
+  --copper:#C17F4E;--copper-light:#D4A07A;--copper-warm:#A86B38;
+  --stone:#F4F1EC;--stone-dark:#E8E3DA;
+  --text:#2C3038;--text-light:#6B7580;--text-soft:#9BA5AF;--white:#FEFDFB;
+  --shadow-sm:0 1px 3px rgba(28,43,54,0.06);--shadow-md:0 4px 20px rgba(28,43,54,0.08);
+}
+html{font-size:18px;}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;}
+.results-wrap{flex:1 0 auto;}
+footer{margin-top:auto;}
+a{color:inherit;}
+/* Nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(254,253,251,0.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(28,43,54,0.07);}
+.nav-inner{max-width:1340px;margin:0 auto;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;}
+.logo-mark{width:34px;height:34px;border-radius:8px;background:var(--slate);display:flex;align-items:center;justify-content:center;}
+.logo-main{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--slate);display:block;line-height:1.1;}
+.logo-sub{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-soft);}
+.nav-links{display:flex;gap:26px;list-style:none;align-items:center;}
+.nav-links a{text-decoration:none;font-size:.82rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--text);}
+.nav-links a.active,.nav-links a:hover{color:var(--slate);}
+.nav-cta{background:var(--copper);color:var(--white)!important;padding:9px 16px;border-radius:6px;}
+.nav-toggle{display:none;background:none;border:none;color:var(--slate);cursor:pointer;}
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--slate-deep),var(--slate-mid));color:var(--white);padding:56px 40px 40px;}
+.hero-inner{max-width:1100px;margin:0 auto;}
+.hero .tag{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--copper-light);}
+.hero h1{font-family:'DM Serif Display',serif;font-size:2.4rem;margin:10px 0 6px;}
+.hero p{color:#B9C4CD;font-size:1.05rem;}
+.controls{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px;}
+.control{flex:1;min-width:200px;}
+.control label{display:block;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#8FA3B3;margin-bottom:6px;}
+.control input,.control select{width:100%;padding:13px 14px;border:1px solid rgba(255,255,255,.14);border-radius:8px;background:rgba(255,255,255,.06);color:var(--white);font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;}
+.control input::placeholder{color:#8FA3B3;}
+.control select option{color:var(--text);}
+.control input:focus,.control select:focus{border-color:var(--copper);background:rgba(255,255,255,.1);}
+/* Results */
+.results-wrap{max-width:1340px;margin:0 auto;padding:36px 40px 90px;}
+.results-meta{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:22px;color:var(--text-light);font-size:.95rem;}
+.results-meta .clear{color:var(--copper-warm);cursor:pointer;font-weight:600;background:none;border:none;font-size:.95rem;}
+.builder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;}
+.builder-card{position:relative;display:block;background:var(--white);border:1px solid rgba(28,43,54,0.08);border-radius:12px;padding:22px;text-decoration:none;color:inherit;box-shadow:var(--shadow-sm);transition:transform .2s,box-shadow .2s,border-color .2s;}
+.builder-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--copper-light);}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.card-name{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--slate);line-height:1.2;}
+.card-cats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.card-cat{font-size:.72rem;background:var(--stone);color:var(--copper-warm);padding:3px 9px;border-radius:20px;font-weight:600;}
+.card-meta{font-size:.88rem;color:var(--text-light);}
+.empty{text-align:center;padding:70px 20px;color:var(--text-light);}
+.empty-icon{font-size:2.4rem;margin-bottom:12px;}
+footer{background:var(--slate-deep);color:#B9C4CD;padding:34px 40px;text-align:center;font-size:.85rem;}
+@media(max-width:760px){.nav-links{display:none;}.nav-toggle{display:block;}.hero h1{font-size:1.8rem;}}
+</style>
+</head>
+<body data-root="">
+<nav id="mainNav"><div class="nav-inner">
+<a class="logo" href="/">
+  <div class="logo-mark"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L2 8h2v7h4v-4h2v4h4V8h2L9 2z" stroke="var(--copper-light)" stroke-width="1.4" fill="none"/></svg></div>
+  <div class="logo-text"><span class="logo-main">Grand Traverse Builders</span><span class="logo-sub">Home Building Directory</span></div>
+</a>
+<ul class="nav-links">
+  <li><a href="/#trades">Trades</a></li>
+  <li><a href="/#directory">Directory</a></li>
+  <li><a href="/categories.html">All Categories</a></li>
+  <li><a href="/search" class="active">Search</a></li>
+  <li><a href="/plan-my-build.html">Plan My Build</a></li>
+  <li><a class="nav-cta" href="/claim.html">List Your Business</a></li>
+</ul>
+<button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">
+  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+</button>
+</div></nav>
+
+<section class="hero"><div class="hero-inner">
+  <div class="tag">Search the Directory</div>
+  <h1>Find Builders &amp; Trades</h1>
+  <p>Search 377 businesses across 119 trades in Northwest Michigan.</p>
+  <div class="controls">
+    <div class="control" style="flex:2;">
+      <label for="q">Search</label>
+      <input id="q" type="text" placeholder="Business name, trade, or city…" autocomplete="off"/>
+    </div>
+    <div class="control">
+      <label for="trade">Trade</label>
+      <select id="trade"><option value="">All trades</option></select>
+    </div>
+    <div class="control">
+      <label for="city">City</label>
+      <select id="city"><option value="">All cities</option></select>
+    </div>
+  </div>
+</div></section>
+
+<section class="results-wrap">
+  <div class="results-meta">
+    <span id="count">Loading…</span>
+    <button class="clear" id="clearBtn" style="display:none;" onclick="clearFilters()">Clear filters</button>
+  </div>
+  <div class="builder-grid" id="builderGrid"></div>
+</section>
+
+<footer>&copy; 2026 Grand Traverse Builders &middot; Antrim &middot; Benzie &middot; Grand Traverse &middot; Kalkaska &middot; Leelanau &middot; Manistee &middot; Missaukee &middot; Wexford &middot; Built by <a href="https://solutionstud.io/" target="_blank" rel="noopener">Solution Studio</a></footer>
+
+<script src="/project.js" defer></script>
+<script>
+(function(){
+  var DATA=[],qEl,tradeEl,cityEl,gridEl,countEl,clearEl,debounceTimer;
+  function esc(s){return (s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function unique(key){var set={};DATA.forEach(function(b){(key==='c'?b.c:[b.city]).forEach(function(v){if(v)set[v]=1;});});return Object.keys(set).sort();}
+  function fillSelect(el,vals){vals.forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});}
+  function render(){
+    var q=qEl.value.trim().toLowerCase(),trade=tradeEl.value,city=cityEl.value;
+    var out=DATA.filter(function(b){
+      if(trade&&b.c.indexOf(trade)<0)return false;
+      if(city&&b.city!==city)return false;
+      if(q){var hay=(b.n+' '+b.c.join(' ')+' '+b.city).toLowerCase();if(hay.indexOf(q)<0)return false;}
+      return true;
+    });
+    countEl.textContent=out.length+(out.length===1?' business':' businesses')+' found';
+    clearEl.style.display=(q||trade||city)?'':'none';
+    if(!out.length){
+      gridEl.innerHTML='<div class="empty" style="grid-column:1/-1;"><div class="empty-icon">🔍</div><p>No businesses match your search.</p><p style="margin-top:6px;color:var(--text-soft);">Try a different term or clear the filters.</p></div>';
+      return;
+    }
+    gridEl.innerHTML=out.map(function(b){
+      return '<a class="builder-card" href="/business/'+encodeURIComponent(b.s)+'">'+
+        '<div class="card-header"><div class="card-name">'+esc(b.n)+'</div></div>'+
+        '<div class="card-cats">'+b.c.slice(0,3).map(function(c){return '<span class="card-cat">'+esc(c)+'</span>';}).join('')+'</div>'+
+        '<div class="card-meta">'+(b.city?('📍 '+esc(b.city)):'Northwest Michigan')+(b.p?(' &middot; '+esc(b.p)):'')+'</div>'+
+      '</a>';
+    }).join('');
+    if(window.updateAllHearts)window.updateAllHearts();
+  }
+  function syncUrl(){
+    var p=new URLSearchParams();
+    if(qEl.value.trim())p.set('q',qEl.value.trim());
+    if(tradeEl.value)p.set('trade',tradeEl.value);
+    if(cityEl.value)p.set('city',cityEl.value);
+    var qs=p.toString();
+    history.replaceState(null,'',location.pathname+(qs?('?'+qs):''));
+  }
+  function onInput(){clearTimeout(debounceTimer);debounceTimer=setTimeout(function(){render();syncUrl();if(window.gtbTrack&&qEl.value.trim())window.gtbTrack('site_search',{query:qEl.value.trim()});},180);}
+  window.clearFilters=function(){qEl.value='';tradeEl.value='';cityEl.value='';render();syncUrl();};
+  function init(){
+    qEl=document.getElementById('q');tradeEl=document.getElementById('trade');cityEl=document.getElementById('city');
+    gridEl=document.getElementById('builderGrid');countEl=document.getElementById('count');clearEl=document.getElementById('clearBtn');
+    fetch('/search-index.json').then(function(r){return r.json();}).then(function(d){
+      DATA=d;
+      fillSelect(tradeEl,unique('c'));fillSelect(cityEl,unique('city'));
+      var p=new URLSearchParams(location.search);
+      if(p.get('q'))qEl.value=p.get('q');
+      if(p.get('trade'))tradeEl.value=p.get('trade');
+      if(p.get('city'))cityEl.value=p.get('city');
+      render();
+      qEl.addEventListener('input',onInput);
+      tradeEl.addEventListener('change',function(){render();syncUrl();});
+      cityEl.addEventListener('change',function(){render();syncUrl();});
+    }).catch(function(){countEl.textContent='Could not load the directory. Please refresh.';});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+</body></html>

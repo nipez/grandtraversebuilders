@@ -2,3 +2,9 @@
 **/.DS_Store
 __MACOSX/
 **/._*
+
+# Wrangler / Cloudflare Pages local dev cache
+.wrangler/
+
+# Python
+__pycache__/

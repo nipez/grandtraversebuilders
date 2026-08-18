@@ -8,6 +8,12 @@
 const STORAGE_KEY = 'nwmi_favorites';
 const PROJECT_KEY = 'nwmi_project';
 
+// Lightweight analytics helper — no-op if gtag isn't loaded.
+function track(action, params){
+  try{ if(typeof window.gtag==='function') window.gtag('event', action, params||{}); }catch(e){}
+}
+window.gtbTrack = track;
+
 const BUILD_PHASES = [
   { phase:"Planning", steps:[
     {id:"builder",label:"General Contractor / Builder",cat:"Building Contractors",icon:"🏠",desc:"Your main builder manages the entire project"},
@@ -51,8 +57,7 @@ function getPageType(){
   return 'other';
 }
 function getCurrentBusinessSlug(){
-  const h=window.location.pathname+window.location.href;
-  const m=h.match(/business\/([^/.?#]+)\.html/);
+  const m=window.location.pathname.match(/\/business\/([^/]+?)(?:\.html)?\/?$/);
   return m?m[1]:null;
 }
 function getCurrentBusinessName(){
@@ -71,6 +76,7 @@ function toggleFavorite(slug){
   let favs=getFavorites();const i=favs.indexOf(slug);
   if(i>-1)favs.splice(i,1);else favs.push(slug);
   saveFavorites(favs);updateAllHearts();updateFavCount();
+  track('favorite_toggle',{business:slug,action:i===-1?'add':'remove'});
   return i===-1;
 }
 function updateAllHearts(){
@@ -99,6 +105,7 @@ window.selectForStep=function(stepId,slug,name){
   if(!p.type)p.type='residential';
   p.selections[stepId]={slug:slug,name:name};
   saveProject(p);renderWizard();updatePlanBadge();refreshDetailPlanCard();refreshPlanButtons();
+  track('plan_add',{step:stepId,business:slug});
   // Flash the step
   const el=document.querySelector('[data-step-id="'+stepId+'"]');
   if(el){el.classList.add('just-added');setTimeout(()=>el.classList.remove('just-added'),1200);}
@@ -206,6 +213,7 @@ function getShareUrl(){
 window.openShareModal=function(){
   let modal=document.getElementById('shareModal');
   if(modal){modal.remove();}
+  track('share_plan',{count:getCompletedCount()});
   const url=getShareUrl();
   const p=getProject();
   const completed=getCompletedCount();
@@ -270,6 +278,116 @@ window.copyShareText=function(){
   navigator.clipboard.writeText(ta.value);
 };
 
+// ── Share / email saved businesses ──────────────────
+function titleize(slug){return slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());}
+function encodeFavorites(){
+  return btoa(unescape(encodeURIComponent(JSON.stringify(getFavorites()))));
+}
+function decodeFavorites(encoded){
+  try{
+    const arr=JSON.parse(decodeURIComponent(escape(atob(encoded))));
+    return Array.isArray(arr)?arr.filter(s=>typeof s==='string'):null;
+  }catch(e){return null;}
+}
+function getFavShareUrl(){
+  return window.location.origin+'/?shared_favs='+encodeFavorites();
+}
+function favShareText(){
+  const favs=getFavorites(),origin=window.location.origin;
+  return `My saved Northwest Michigan builders (${favs.length}):\n\n`+
+    favs.map(s=>`• ${titleize(s)} — ${origin}/business/${s}`).join('\n')+
+    `\n\nView the full list: ${getFavShareUrl()}`;
+}
+window.openFavShareModal=function(){
+  const favs=getFavorites();
+  if(!favs.length)return;
+  track('share_favorites',{count:favs.length});
+  let modal=document.getElementById('shareModal');if(modal)modal.remove();
+  const url=getFavShareUrl();
+  const text=favShareText();
+  const mailto='mailto:?subject='+encodeURIComponent('My saved Northwest Michigan builders')+'&body='+encodeURIComponent(text);
+  modal=document.createElement('div');modal.id='shareModal';modal.className='share-modal';
+  modal.innerHTML=`
+    <div class="share-modal-bg" onclick="closeShareModal()"></div>
+    <div class="share-modal-content">
+      <div class="share-modal-header">
+        <h3>Share Your Saved Builders</h3>
+        <button class="wz-close" onclick="closeShareModal()">✕</button>
+      </div>
+      <div class="share-modal-body">
+        <p class="share-modal-desc">Send your shortlist to a spouse, partner, or friend. They'll see a read-only list with links to each business.</p>
+        <div class="share-section">
+          <label class="share-label">Share Link</label>
+          <div class="share-url-row">
+            <input type="text" class="share-url-input" id="shareUrl" value="${url}" readonly onclick="this.select()"/>
+            <button class="share-copy-btn" id="copyBtn" onclick="copyShareUrl()">Copy</button>
+          </div>
+        </div>
+        <div class="share-section">
+          <a class="share-copy-text-btn" style="display:inline-block;text-decoration:none;text-align:center;" href="${mailto}" onclick="gtbTrack('email_favorites',{count:${favs.length}})">✉️ Email My List</a>
+        </div>
+        <div class="share-section">
+          <label class="share-label">Or copy as text</label>
+          <textarea class="share-text-area" id="shareText" readonly onclick="this.select()">${text}</textarea>
+          <button class="share-copy-text-btn" onclick="copyShareText()">Copy Text Summary</button>
+        </div>
+        <div class="share-preview">
+          <div class="share-preview-label">Preview (${favs.length} saved)</div>
+          ${favs.map(s=>`<span class="share-preview-tag">${titleize(s)}</span>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  requestAnimationFrame(()=>modal.classList.add('open'));
+};
+
+function checkForSharedFavorites(){
+  const params=new URLSearchParams(window.location.search);
+  const encoded=params.get('shared_favs');
+  if(!encoded)return;
+  const slugs=decodeFavorites(encoded);
+  if(!slugs||!slugs.length)return;
+  showSharedFavoritesOverlay(slugs);
+}
+function showSharedFavoritesOverlay(slugs){
+  const prefix=getRoot();
+  const overlay=document.createElement('div');
+  overlay.className='shared-plan-overlay';overlay.id='sharedFavsOverlay';
+  let h=`<div class="shared-plan-card">
+    <div class="shared-plan-header">
+      <div class="shared-plan-tag">♥ Shared Saved Builders</div>
+      <h2>${slugs.length} Saved ${slugs.length===1?'Builder':'Builders'}</h2>
+      <p>Someone shared their shortlist of Northwest Michigan builders with you.</p>
+    </div>
+    <div class="shared-plan-phases"><div class="shared-phase">`;
+  slugs.forEach(s=>{
+    h+=`<a href="${prefix}business/${s}.html" class="shared-vendor">
+      <div class="shared-vendor-icon">♥</div>
+      <div class="shared-vendor-info"><div class="shared-vendor-name">${titleize(s)}</div></div>
+      <span class="shared-vendor-arrow">→</span>
+    </a>`;
+  });
+  h+=`</div></div>
+    <div class="shared-plan-actions">
+      <button class="shared-plan-btn primary" onclick="importSharedFavorites()">♥ Save All to My List</button>
+      <button class="shared-plan-btn" onclick="document.getElementById('sharedFavsOverlay').remove();history.replaceState(null,'',location.pathname);">Browse Directory Instead</button>
+    </div>
+  </div>`;
+  overlay.innerHTML=h;
+  document.body.appendChild(overlay);
+  overlay._favs=slugs;
+  requestAnimationFrame(()=>overlay.classList.add('open'));
+}
+window.importSharedFavorites=function(){
+  const overlay=document.getElementById('sharedFavsOverlay');
+  if(!overlay||!overlay._favs)return;
+  const merged=Array.from(new Set(getFavorites().concat(overlay._favs)));
+  saveFavorites(merged);updateAllHearts();updateFavCount();
+  track('import_favorites',{count:overlay._favs.length});
+  overlay.remove();history.replaceState(null,'',location.pathname);
+  toggleFavPanel();
+};
+
 // ── Favorites panel ─────────────────────────────────
 function renderFavPanel(){
   const panel=document.getElementById('favPanel');if(!panel)return;
@@ -284,7 +402,7 @@ function renderFavPanel(){
       const name=slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
       h+=`<a href="${prefix}business/${slug}.html" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
     });
-    h+=`</div><div style="padding:16px 20px;"><button class="wz-reset" style="width:100%;text-align:center;" onclick="if(confirm('Clear all saved?')){saveFavorites([]);updateAllHearts();updateFavCount();renderFavPanel();}">Clear All Saved</button></div>`;
+    h+=`</div><div class="wz-share-bar"><button class="wz-share-btn" onclick="openFavShareModal()">📤 Share / Email My List</button></div><div style="padding:16px 20px;"><button class="wz-reset" style="width:100%;text-align:center;" onclick="if(confirm('Clear all saved?')){saveFavorites([]);updateAllHearts();updateFavCount();renderFavPanel();}">Clear All Saved</button></div>`;
   }
   panel.innerHTML=h;
 }
@@ -649,6 +767,7 @@ function injectUI(){
   injectCategoryPlanFeatures();
   injectDetailPlanCard();
   checkForSharedPlan();
+  checkForSharedFavorites();
   updateFavCount();updatePlanBadge();
 }
 
