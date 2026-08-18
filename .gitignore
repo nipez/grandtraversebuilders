@@ -5,3 +5,6 @@ __MACOSX/
 
 # Wrangler / Cloudflare Pages local dev cache
 .wrangler/
+
+# Python
+__pycache__/
