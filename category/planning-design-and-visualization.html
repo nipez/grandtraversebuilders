@@ -860,7 +860,7 @@ footer{background:var(--charcoal);padding:60px 40px 32px;color:rgba(244,241,236,
 </div></footer>
 
 <script>
-const businesses=[{"n":"City of Cadillac","p":"231-779-7325","a":"","w":"https://www.cadillac-mi.net/","c":["Affordable Housing - Non-Profit","Planning, Design and Visualization"],"s":"city-of-cadillac","city":""},{"n":"Design Classics","p":"231-275-5170","a":"","w":"https://www.houzz.com/pro/kenwill/_public","c":["Architectural  & Design Services","Planning, Design and Visualization"],"s":"design-classics","city":""},{"n":"Palchak Design Build, LLC","p":"231-947-7040","a":"808 S. Garfield Ave., Ste. B, Traverse City, MI 49686","w":"https://www.homecabinetryandinteriors.com/","c":["Building Contractors","Planning, Design and Visualization"],"s":"palchak-design-build-llc","city":"Traverse City"}];
+const businesses=[{"n":"City of Cadillac","p":"231-779-7325","a":"","w":"https://www.cadillac-mi.net/","c":["Affordable Housing - Non-Profit","Planning, Design and Visualization"],"s":"city-of-cadillac"},{"n":"Design Classics","p":"231-275-5170","a":"","w":"https://www.houzz.com/pro/kenwill/_public","c":["Architectural  & Design Services","Planning, Design and Visualization"],"s":"design-classics"},{"n":"Palchak Design Build, LLC","p":"","a":"","w":"","c":["Building Contractors","Planning, Design and Visualization"],"s":"palchak-design-build-llc"}];
 let currentCity='all',currentSearch='';
 
 function getInitials(n){return n.split(/[\s&,]+/).filter(w=>w.length>1&&!['LLC','Inc','Inc.','Co','Co.','of','the','and','The'].includes(w)).slice(0,2).map(w=>w[0].toUpperCase()).join('');}
