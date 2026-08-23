@@ -8,12 +8,12 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Ford Insurance Agency, Inc — Insurance in Traverse City | Grand Traverse Builders</title>
 <meta content="Ford Insurance Agency, Inc is a verified insurance in Traverse City. Contact info, services, and more." name="description"/>
-<link rel="canonical" href="https://grandtraversebuilders.com/business/ford-insurance-agency-inc.html"/>
+<link rel="canonical" href="https://grandtraversebuilders.com/business/ford-insurance-agency-inc"/>
 <!-- Open Graph -->
 <meta property="og:title" content="Ford Insurance Agency, Inc — Insurance in Traverse City | Grand Traverse Builders"/>
 <meta property="og:description" content="Ford Insurance Agency, Inc is a verified insurance in Traverse City. Contact info, services, and more."/>
 <meta property="og:type" content="business.business"/>
-<meta property="og:url" content="https://grandtraversebuilders.com/business/ford-insurance-agency-inc.html"/>
+<meta property="og:url" content="https://grandtraversebuilders.com/business/ford-insurance-agency-inc"/>
 <meta property="og:site_name" content="Grand Traverse Builders"/>
 <meta property="og:locale" content="en_US"/>
 <!-- Twitter -->
@@ -24,7 +24,7 @@
 <meta name="geo.region" content="US-MI"/>
 <meta name="geo.placename" content="Traverse City, Michigan"/>
 <!-- Schema -->
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":null},{"@type":"ListItem","position":2,"name":"Insurance","item":"https://grandtraversebuilders.com/category/insurance.html"},{"@type":"ListItem","position":3,"name":"Ford Insurance Agency, Inc","item":"https://grandtraversebuilders.com/business/ford-insurance-agency-inc.html"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"Ford Insurance Agency, Inc","url":"https://grandtraversebuilders.com/business/ford-insurance-agency-inc.html","description":"Ford Insurance Agency, Inc is a verified building professional serving Traverse City and surrounding areas.","areaServed":{"@type":"City","name":"Traverse City","containedInPlace":{"@type":"State","name":"Michigan"}},"telephone":"231-941-0450","sameAs":"http://www.fordinsurance.net/","address":{"@type":"PostalAddress","streetAddress":"920 S. Garfield Ave.","addressLocality":"Traverse City","addressRegion":"MI","addressCountry":"US"},"knowsAbout":["Insurance"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":null},{"@type":"ListItem","position":2,"name":"Insurance","item":"https://grandtraversebuilders.com/category/insurance"},{"@type":"ListItem","position":3,"name":"Ford Insurance Agency, Inc","item":"https://grandtraversebuilders.com/business/ford-insurance-agency-inc"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"Ford Insurance Agency, Inc","url":"https://grandtraversebuilders.com/business/ford-insurance-agency-inc","description":"Ford Insurance Agency, Inc is a verified building professional serving Traverse City and surrounding areas.","areaServed":{"@type":"City","name":"Traverse City","containedInPlace":{"@type":"State","name":"Michigan"}},"telephone":"231-941-0450","sameAs":"http://www.fordinsurance.net/","address":{"@type":"PostalAddress","streetAddress":"920 S. Garfield Ave.","addressLocality":"Traverse City","addressRegion":"MI","addressCountry":"US"},"knowsAbout":["Insurance"]}</script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
 <style>
@@ -799,7 +799,7 @@ function getPageType(){
 }
 function getCurrentBusinessSlug(){
   const h=window.location.pathname+window.location.href;
-  const m=h.match(/business\/([^/.?#]+)\.html/);
+  const m=h.match(/business\/([^/.?#]+)/);
   return m?m[1]:null;
 }
 function getCurrentBusinessName(){
@@ -900,7 +900,7 @@ function renderWizard(){
           h+=`<div class="wz-step done" data-step-id="${step.id}">
             <div class="wz-step-check">✓</div>
             <div class="wz-step-info"><div class="wz-step-label">${step.label}</div>
-              <a href="${prefix}business/${sel.slug}.html" class="wz-step-selected">${sel.name}</a></div>
+              <a href="${prefix}business/${sel.slug}" class="wz-step-selected">${sel.name}</a></div>
             <button class="wz-step-remove" onclick="removeFromStep('${step.id}')">✕</button></div>`;
         } else {
           let addBtn='';
@@ -910,7 +910,7 @@ function renderWizard(){
           h+=`<div class="wz-step${step.optional?' optional':''}" data-step-id="${step.id}">
             <div class="wz-step-num">${step.icon}</div>
             <div class="wz-step-info"><div class="wz-step-label">${step.label}${step.optional?' <span class="wz-opt">(optional)</span>':''}</div>
-              <a href="${prefix}category/${catSlug}.html?step=${step.id}" class="wz-step-browse">Browse ${step.label} →</a></div>
+              <a href="${prefix}category/${catSlug}?step=${step.id}" class="wz-step-browse">Browse ${step.label} →</a></div>
             ${addBtn}</div>`;
         }
       });
@@ -943,11 +943,8 @@ function decodePlan(encoded){
   }catch(e){return null;}
 }
 function getShareUrl(){
-  const base=window.location.href.split('?')[0].split('#')[0];
-  // Point to index.html (or plan.html)
-  const root=getRoot();
-  const origin=base.substring(0,base.lastIndexOf('/')+1);
-  return origin+root+'index.html?shared_plan='+encodePlan();
+  // Extensionless site root with shared_plan query
+  return window.location.origin+'/?shared_plan='+encodePlan();
 }
 
 window.openShareModal=function(){
@@ -1029,7 +1026,7 @@ function renderFavPanel(){
     h+=`<div class="fav-list">`;
     favs.forEach(slug=>{
       const name=slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-      h+=`<a href="${prefix}business/${slug}.html" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
+      h+=`<a href="${prefix}business/${slug}" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
     });
     h+=`</div><div style="padding:16px 20px;"><button class="wz-reset" style="width:100%;text-align:center;" onclick="if(confirm('Clear all saved?')){saveFavorites([]);updateAllHearts();updateFavCount();renderFavPanel();}">Clear All Saved</button></div>`;
   }
@@ -1077,7 +1074,7 @@ function addPlanButtonsToCards(){
   document.querySelectorAll('.builder-card').forEach(card=>{
     if(card.querySelector('.card-plan-btn'))return;
     const href=card.getAttribute('href')||'';
-    const m=href.match(/business\/([^/.?#]+)\.html/);
+    const m=href.match(/business\/([^/.?#]+)/);
     if(!m)return;
     const slug=m[1];
     const nameEl=card.querySelector('.card-name');
@@ -1346,7 +1343,7 @@ function addHeartsToCards(){
   document.querySelectorAll('.builder-card').forEach(card=>{
     if(card.querySelector('.heart-btn'))return;
     const href=card.getAttribute('href')||'';
-    const m=href.match(/business\/([^/.?#]+)\.html/);if(!m)return;
+    const m=href.match(/business\/([^/.?#]+)/);if(!m)return;
     const slug=m[1];
     const btn=document.createElement('button');
     btn.className='heart-btn'+(isFavorite(slug)?' is-fav':'');
@@ -1433,7 +1430,7 @@ function showSharedPlanOverlay(plan){
       <div class="shared-phase-label">${phase.phase}</div>`;
     filled.forEach(step=>{
       const sel=selections[step.id];
-      h+=`<a href="${prefix}business/${sel.slug}.html" class="shared-vendor">
+      h+=`<a href="${prefix}business/${sel.slug}" class="shared-vendor">
         <div class="shared-vendor-icon">${step.icon}</div>
         <div class="shared-vendor-info">
           <div class="shared-vendor-role">${step.label}</div>
@@ -1503,10 +1500,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <ul class="nav-links">
   <li><a href="../#trades">Trades</a></li>
   <li><a href="../#directory">Directory</a></li>
-  <li><a href="../categories.html">All Categories</a></li>
+  <li><a href="../categories">All Categories</a></li>
   <li><a href="../blog/">Blog</a></li>
-  <li><a href="../plan-my-build.html">Plan My Build</a></li>
-  <li><a class="nav-cta" href="../claim.html">List Your Business</a></li>
+  <li><a href="../plan-my-build">Plan My Build</a></li>
+  <li><a class="nav-cta" href="../claim">List Your Business</a></li>
 </ul>
 <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">
   <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -1515,7 +1512,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 <div class="breadcrumbs">
   <a href="../">Home</a><span class="sep">/</span>
-  <a href="../category/insurance.html">Insurance</a><span class="sep">/</span>
+  <a href="../category/insurance">Insurance</a><span class="sep">/</span>
   <span class="current">Ford Insurance Agency, Inc</span>
 </div>
 
@@ -1548,7 +1545,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
       </div>
     </div>
     
-    <div class="section-label">Services & Specialties</div><div class="services-grid"><a href="../category/insurance.html" class="service-card" style="text-decoration:none;color:inherit;"><div class="service-card-icon">🛡️</div><div class="service-card-name">Insurance</div><div class="service-card-desc">Verified Professional</div></a></div>
+    <div class="section-label">Services & Specialties</div><div class="services-grid"><a href="../category/insurance" class="service-card" style="text-decoration:none;color:inherit;"><div class="service-card-icon">🛡️</div><div class="service-card-name">Insurance</div><div class="service-card-desc">Verified Professional</div></a></div>
     
     <div class="gallery-section">
       <div class="section-label">Project Gallery</div>
@@ -1572,7 +1569,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
           <div class="gallery-empty-icon">📸</div>
           <h3>Showcase Your Best Work</h3>
           <p>Homeowners want to see completed projects before they call. Add photos of your builds, remodels, and craftsmanship to stand out from the competition.</p>
-          <a href="../claim.html?business=Ford%20Insurance%20Agency%2C%20Inc" class="gallery-claim-btn">Add Project Photos →</a>
+          <a href="../claim?business=Ford%20Insurance%20Agency%2C%20Inc" class="gallery-claim-btn">Add Project Photos →</a>
         </div>
       </div>
     </div>
@@ -1580,7 +1577,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <div class="claim-banner">
       <h3>Is This Your Business?</h3>
       <p>Claim your free listing to add photos, a detailed description, and showcase your best work. Premium listings get priority placement and lead generation.</p>
-      <a href="../claim.html?business=Ford%20Insurance%20Agency%2C%20Inc" class="btn-primary">Claim This Listing</a>
+      <a href="../claim?business=Ford%20Insurance%20Agency%2C%20Inc" class="btn-primary">Claim This Listing</a>
     </div>
   </div>
   
@@ -1615,7 +1612,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <div class="section-tag">Similar Businesses</div>
     <h2 class="section-title">More Insurance</h2>
   </div>
-  <div class="builder-grid"><a class="builder-card" href="../business/acrisure.html">
+  <div class="builder-grid"><a class="builder-card" href="../business/acrisure">
   <div class="card-header">
     <div class="card-avatar" style="background:#4A6A5A">A</div>
     <div class="card-info">
@@ -1631,7 +1628,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <div class="card-footer-left"><span class="card-phone"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5C2 8.5 3.5 10 8.5 10l1-2.2-2.3-1L6 8c-1.2-.5-2.5-1.8-3-3l1.2-1.2-1-2.3z"/></svg>231-932-0264</span><span class="card-link">View Details <span>&rarr;</span></span></div>
   </div>
 </a>
-<a class="builder-card" href="../business/attorneys-title-agency.html">
+<a class="builder-card" href="../business/attorneys-title-agency">
   <div class="card-header">
     <div class="card-avatar" style="background:#4A6A5A">AT</div>
     <div class="card-info">
@@ -1647,7 +1644,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <div class="card-footer-left"><span class="card-phone"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5C2 8.5 3.5 10 8.5 10l1-2.2-2.3-1L6 8c-1.2-.5-2.5-1.8-3-3l1.2-1.2-1-2.3z"/></svg>231-929-0071</span><span class="card-link">View Details <span>&rarr;</span></span></div>
   </div>
 </a>
-<a class="builder-card" href="../business/feike-agency-farm-bureau-insurance.html">
+<a class="builder-card" href="../business/feike-agency-farm-bureau-insurance">
   <div class="card-header">
     <div class="card-avatar" style="background:#4A6A5A">FA</div>
     <div class="card-info">
@@ -1663,7 +1660,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <div class="card-footer-left"><span class="card-phone"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5C2 8.5 3.5 10 8.5 10l1-2.2-2.3-1L6 8c-1.2-.5-2.5-1.8-3-3l1.2-1.2-1-2.3z"/></svg>614-496-4740</span><span class="card-link">View Details <span>&rarr;</span></span></div>
   </div>
 </a>
-<a class="builder-card" href="../business/fischer-insurance-agency.html">
+<a class="builder-card" href="../business/fischer-insurance-agency">
   <div class="card-header">
     <div class="card-avatar" style="background:#4A6A5A">FI</div>
     <div class="card-info">
@@ -1686,7 +1683,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="cta-inner">
   <h2>Are You a Builder or Contractor?</h2>
   <p>Get listed in Northwest Michigan's most comprehensive building directory. Reach homeowners actively planning new builds and renovations.</p>
-  <a href="../claim.html" class="btn-primary">Get Listed</a>
+  <a href="../claim" class="btn-primary">Get Listed</a>
 </div>
 </section>
 <footer><div class="footer-inner">
@@ -1695,12 +1692,12 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <div class="logo-text"><span class="logo-main">Grand Traverse Builders</span><span class="logo-sub">Home Building Directory</span></div>
     <p>Your comprehensive guide to home builders, contractors, and skilled trades across Northwest Michigan's 8 counties.</p>
   </div>
-  <div class="footer-col"><h4>Top Trades</h4><ul><li><a href="../category/building-contractors.html">Home Builders</a></li><li><a href="../category/remodeling-contractors.html">Remodeling</a></li><li><a href="../category/building-materials-retail.html">Materials (Retail)</a></li><li><a href="../category/kitchen-bath.html">Kitchen & Bath</a></li><li><a href="../category/windows-doors.html">Windows & Doors</a></li><li><a href="../category/roofing.html">Roofing</a></li></ul></div>
+  <div class="footer-col"><h4>Top Trades</h4><ul><li><a href="../category/building-contractors">Home Builders</a></li><li><a href="../category/remodeling-contractors">Remodeling</a></li><li><a href="../category/building-materials-retail">Materials (Retail)</a></li><li><a href="../category/kitchen-bath">Kitchen & Bath</a></li><li><a href="../category/windows-doors">Windows & Doors</a></li><li><a href="../category/roofing">Roofing</a></li></ul></div>
   <div class="footer-col"><h4>Resources</h4><ul>
-    <li><a href="../categories.html">All Categories</a></li>
-    <li><a href="../plan-my-build.html">Plan My Build</a></li>
+    <li><a href="../categories">All Categories</a></li>
+    <li><a href="../plan-my-build">Plan My Build</a></li>
     <li><a href="../blog/">Building Guides</a></li>
-    <li><a href="../blog/building-permits-grand-traverse-county-guide.html">Permit Info</a></li>
+    <li><a href="../blog/building-permits-grand-traverse-county-guide">Permit Info</a></li>
   </ul></div>
   <div class="footer-col"><h4>Company</h4><ul>
     <li><a href="#">About Us</a></li>

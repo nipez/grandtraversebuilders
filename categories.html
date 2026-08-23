@@ -8,12 +8,12 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>All Trade Categories — Grand Traverse Builders</title>
 <meta content="Browse all 119 trade categories in the Northwest Michigan building directory." name="description"/>
-<link rel="canonical" href="https://grandtraversebuilders.com/categories.html"/>
+<link rel="canonical" href="https://grandtraversebuilders.com/categories"/>
 <!-- Open Graph -->
 <meta property="og:title" content="All Trade Categories — Grand Traverse Builders"/>
 <meta property="og:description" content="Browse all 119 trade categories in the Northwest Michigan building directory."/>
 <meta property="og:type" content="website"/>
-<meta property="og:url" content="https://grandtraversebuilders.com/categories.html"/>
+<meta property="og:url" content="https://grandtraversebuilders.com/categories"/>
 <meta property="og:site_name" content="Grand Traverse Builders"/>
 <meta property="og:locale" content="en_US"/>
 <!-- Twitter -->
@@ -24,7 +24,7 @@
 <meta name="geo.region" content="US-MI"/>
 <meta name="geo.placename" content="Traverse City, Michigan"/>
 <!-- Schema -->
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":null},{"@type":"ListItem","position":2,"name":"All Categories","item":"https://grandtraversebuilders.com/categories.html"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":null},{"@type":"ListItem","position":2,"name":"All Categories","item":"https://grandtraversebuilders.com/categories"}]}</script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
 <style>
@@ -799,7 +799,7 @@ function getPageType(){
 }
 function getCurrentBusinessSlug(){
   const h=window.location.pathname+window.location.href;
-  const m=h.match(/business\/([^/.?#]+)\.html/);
+  const m=h.match(/business\/([^/.?#]+)/);
   return m?m[1]:null;
 }
 function getCurrentBusinessName(){
@@ -900,7 +900,7 @@ function renderWizard(){
           h+=`<div class="wz-step done" data-step-id="${step.id}">
             <div class="wz-step-check">✓</div>
             <div class="wz-step-info"><div class="wz-step-label">${step.label}</div>
-              <a href="${prefix}business/${sel.slug}.html" class="wz-step-selected">${sel.name}</a></div>
+              <a href="${prefix}business/${sel.slug}" class="wz-step-selected">${sel.name}</a></div>
             <button class="wz-step-remove" onclick="removeFromStep('${step.id}')">✕</button></div>`;
         } else {
           let addBtn='';
@@ -910,7 +910,7 @@ function renderWizard(){
           h+=`<div class="wz-step${step.optional?' optional':''}" data-step-id="${step.id}">
             <div class="wz-step-num">${step.icon}</div>
             <div class="wz-step-info"><div class="wz-step-label">${step.label}${step.optional?' <span class="wz-opt">(optional)</span>':''}</div>
-              <a href="${prefix}category/${catSlug}.html?step=${step.id}" class="wz-step-browse">Browse ${step.label} →</a></div>
+              <a href="${prefix}category/${catSlug}?step=${step.id}" class="wz-step-browse">Browse ${step.label} →</a></div>
             ${addBtn}</div>`;
         }
       });
@@ -943,11 +943,8 @@ function decodePlan(encoded){
   }catch(e){return null;}
 }
 function getShareUrl(){
-  const base=window.location.href.split('?')[0].split('#')[0];
-  // Point to index.html (or plan.html)
-  const root=getRoot();
-  const origin=base.substring(0,base.lastIndexOf('/')+1);
-  return origin+root+'index.html?shared_plan='+encodePlan();
+  // Extensionless site root with shared_plan query
+  return window.location.origin+'/?shared_plan='+encodePlan();
 }
 
 window.openShareModal=function(){
@@ -1029,7 +1026,7 @@ function renderFavPanel(){
     h+=`<div class="fav-list">`;
     favs.forEach(slug=>{
       const name=slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-      h+=`<a href="${prefix}business/${slug}.html" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
+      h+=`<a href="${prefix}business/${slug}" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
     });
     h+=`</div><div style="padding:16px 20px;"><button class="wz-reset" style="width:100%;text-align:center;" onclick="if(confirm('Clear all saved?')){saveFavorites([]);updateAllHearts();updateFavCount();renderFavPanel();}">Clear All Saved</button></div>`;
   }
@@ -1077,7 +1074,7 @@ function addPlanButtonsToCards(){
   document.querySelectorAll('.builder-card').forEach(card=>{
     if(card.querySelector('.card-plan-btn'))return;
     const href=card.getAttribute('href')||'';
-    const m=href.match(/business\/([^/.?#]+)\.html/);
+    const m=href.match(/business\/([^/.?#]+)/);
     if(!m)return;
     const slug=m[1];
     const nameEl=card.querySelector('.card-name');
@@ -1346,7 +1343,7 @@ function addHeartsToCards(){
   document.querySelectorAll('.builder-card').forEach(card=>{
     if(card.querySelector('.heart-btn'))return;
     const href=card.getAttribute('href')||'';
-    const m=href.match(/business\/([^/.?#]+)\.html/);if(!m)return;
+    const m=href.match(/business\/([^/.?#]+)/);if(!m)return;
     const slug=m[1];
     const btn=document.createElement('button');
     btn.className='heart-btn'+(isFavorite(slug)?' is-fav':'');
@@ -1433,7 +1430,7 @@ function showSharedPlanOverlay(plan){
       <div class="shared-phase-label">${phase.phase}</div>`;
     filled.forEach(step=>{
       const sel=selections[step.id];
-      h+=`<a href="${prefix}business/${sel.slug}.html" class="shared-vendor">
+      h+=`<a href="${prefix}business/${sel.slug}" class="shared-vendor">
         <div class="shared-vendor-icon">${step.icon}</div>
         <div class="shared-vendor-info">
           <div class="shared-vendor-role">${step.label}</div>
@@ -1503,10 +1500,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <ul class="nav-links">
   <li><a href="./#trades">Trades</a></li>
   <li><a href="./#directory">Directory</a></li>
-  <li><a href="categories.html"class='active'>All Categories</a></li>
+  <li><a href="categories"class='active'>All Categories</a></li>
   <li><a href="blog/">Blog</a></li>
-  <li><a href="plan-my-build.html">Plan My Build</a></li>
-  <li><a class="nav-cta" href="claim.html">List Your Business</a></li>
+  <li><a href="plan-my-build">Plan My Build</a></li>
+  <li><a class="nav-cta" href="claim">List Your Business</a></li>
 </ul>
 <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">
   <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -1535,125 +1532,125 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   </div>
 </div>
 <div class="all-cats-grid" id="catsGrid">
-<a class="all-cats-link" href="category/building-contractors.html"><span>🏠 Building Contractors</span><span class="ac-count">112</span></a>
-<a class="all-cats-link" href="category/remodeling-contractors.html"><span>🔨 Remodeling Contractors</span><span class="ac-count">65</span></a>
-<a class="all-cats-link" href="category/building-materials-retail.html"><span>🏪 Building Materials - Retail</span><span class="ac-count">17</span></a>
-<a class="all-cats-link" href="category/kitchen-bath.html"><span>🍳 Kitchen &amp; Bath</span><span class="ac-count">15</span></a>
-<a class="all-cats-link" href="category/windows-doors.html"><span>🪟 Windows &amp; Doors</span><span class="ac-count">14</span></a>
-<a class="all-cats-link" href="category/roofing.html"><span>🏗️ Roofing</span><span class="ac-count">13</span></a>
-<a class="all-cats-link" href="category/banking-mortgage.html"><span>🏦 Banking &amp; Mortgage</span><span class="ac-count">13</span></a>
-<a class="all-cats-link" href="category/siding-contractors.html"><span>🧱 Siding Contractors</span><span class="ac-count">12</span></a>
-<a class="all-cats-link" href="category/mortgage-banking-construction-lending.html"><span>💰 Mortgage Banking - Construction Lending</span><span class="ac-count">12</span></a>
-<a class="all-cats-link" href="category/cabinetry-whole-house.html"><span>🗄️ Cabinetry - Whole House</span><span class="ac-count">12</span></a>
-<a class="all-cats-link" href="category/insurance.html"><span>🛡️ Insurance</span><span class="ac-count">11</span></a>
-<a class="all-cats-link" href="category/excavating.html"><span>🚜 Excavating</span><span class="ac-count">11</span></a>
-<a class="all-cats-link" href="category/building-materials-wholesale.html"><span>🪵 Building Materials - Wholesale</span><span class="ac-count">11</span></a>
-<a class="all-cats-link" href="category/painting-wallpaper-contractors.html"><span>🎨 Painting &amp; Wallpaper Contractors</span><span class="ac-count">10</span></a>
-<a class="all-cats-link" href="category/electrical-contractors.html"><span>⚡ Electrical Contractors</span><span class="ac-count">9</span></a>
-<a class="all-cats-link" href="category/decks.html"><span>🪑 Decks</span><span class="ac-count">9</span></a>
-<a class="all-cats-link" href="category/architectural-design-services.html"><span>🔧 Architectural  &amp; Design Services</span><span class="ac-count">9</span></a>
-<a class="all-cats-link" href="category/real-estate-development.html"><span>🏘️ Real Estate Development</span><span class="ac-count">8</span></a>
-<a class="all-cats-link" href="category/interior-design-staging.html"><span>🔧 Interior Design &amp; Staging</span><span class="ac-count">8</span></a>
-<a class="all-cats-link" href="category/landscaping-gardening-contractors.html"><span>🔧 Landscaping &amp; Gardening Contractors</span><span class="ac-count">8</span></a>
-<a class="all-cats-link" href="category/landscaping-design-services.html"><span>🔧 Landscaping Design Services</span><span class="ac-count">8</span></a>
-<a class="all-cats-link" href="category/hvac-contractors.html"><span>❄️ HVAC Contractors</span><span class="ac-count">7</span></a>
-<a class="all-cats-link" href="category/framing-contractors.html"><span>🔧 Framing Contractors</span><span class="ac-count">7</span></a>
-<a class="all-cats-link" href="category/advertising-marketing-public-relations.html"><span>🔧 Advertising, Marketing &amp; Public Relations</span><span class="ac-count">6</span></a>
-<a class="all-cats-link" href="category/hardscape-installation-suppliers.html"><span>🔧 Hardscape Installation &amp; Suppliers</span><span class="ac-count">6</span></a>
-<a class="all-cats-link" href="category/cleaning.html"><span>🔧 Cleaning</span><span class="ac-count">6</span></a>
-<a class="all-cats-link" href="category/concrete-floors-epoxy-resurfacing-polishing.html"><span>🔧 Concrete Floors - Epoxy, Resurfacing, &amp; Polishing</span><span class="ac-count">6</span></a>
-<a class="all-cats-link" href="category/insulation-contractors-installers.html"><span>🧤 Insulation Contractors &amp; Installers</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/lighting.html"><span>💡 Lighting</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/printing.html"><span>🔧 Printing</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/real-estate-broker.html"><span>🔧 Real Estate Broker</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/affordable-housing-non-profit.html"><span>🤝 Affordable Housing - Non-Profit</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/floor-coverings-hardwood-floors.html"><span>🔧 Floor Coverings &amp; Hardwood Floors</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/plumbing-contractors.html"><span>🔧 Plumbing Contractors</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/stone-stone-veneer-suppliers.html"><span>🔧 Stone &amp; Stone Veneer Suppliers</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/land-developers.html"><span>🗺️ Land Developers</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/concrete-foundations-poured-walls-precast.html"><span>🔧 Concrete - Foundations, Poured Walls, &amp; Precast</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/financial-advisors.html"><span>🔧 Financial Advisors</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/restoration-fire-water.html"><span>🔧 Restoration - Fire &amp; Water</span><span class="ac-count">5</span></a>
-<a class="all-cats-link" href="category/gutters.html"><span>💧 Gutters</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/handyman-services.html"><span>🔧 Handyman Services</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/education-training.html"><span>🔧 Education &amp; Training</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/demolition-contractors.html"><span>🏗️ Demolition Contractors</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/remodeling-suppliers.html"><span>🔧 Remodeling Suppliers</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/waste-disposal.html"><span>🔧 Waste Disposal</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/tile.html"><span>🔧 Tile</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/accountants-consultants.html"><span>🔧 Accountants &amp; Consultants</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/web-internet-development.html"><span>🔧 Web &amp; Internet Development</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/countertops.html"><span>🔧 Countertops</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/trucking-sand-gravel.html"><span>🔧 Trucking - Sand &amp; Gravel</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/pole-buildings-garages.html"><span>🏚️ Pole Buildings &amp; Garages</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/fireplaces.html"><span>🔥 Fireplaces</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/garage-doors.html"><span>🚗 Garage Doors</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/trim-finish-carpentry.html"><span>🪚 Trim &amp; Finish Carpentry</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/moving-storage.html"><span>🔧 Moving &amp; Storage</span><span class="ac-count">4</span></a>
-<a class="all-cats-link" href="category/home-theater-and-sound-system.html"><span>🔧 Home Theater and Sound System</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/signs.html"><span>🔧 Signs</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/furniture.html"><span>🔧 Furniture</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/trusses.html"><span>🔧 Trusses</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/utilities.html"><span>🔧 Utilities</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/planning-design-and-visualization.html"><span>🔧 Planning, Design and Visualization</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/irrigation.html"><span>🔧 Irrigation</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/timber-frame-manufacturer.html"><span>🔧 Timber Frame Manufacturer</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/water-treatment.html"><span>🔧 Water Treatment</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/home-automation.html"><span>📱 Home Automation</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/engineering-consultants.html"><span>🔧 Engineering Consultants</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/graphic-design.html"><span>🔧 Graphic Design</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/retaining-walls.html"><span>🔧 Retaining Walls</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/drywall-contractors.html"><span>🔧 Drywall Contractors</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/swimming-pools.html"><span>🔧 Swimming Pools</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/portable-toilets.html"><span>🔧 Portable Toilets</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/millwork-contractors.html"><span>🔧 Millwork Contractors</span><span class="ac-count">3</span></a>
-<a class="all-cats-link" href="category/energy-consulting.html"><span>🔧 Energy Consulting</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/sewer-water-installation.html"><span>🔧 Sewer &amp; Water Installation</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/title-insurance.html"><span>🔧 Title Insurance</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/windows-coverings-treatments-or-film-installation.html"><span>🔧 Windows - Coverings, Treatments, &amp;/or Film Installation</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/well-drilling.html"><span>🔧 Well Drilling</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/glass-contractors-installers.html"><span>🔧 Glass Contractors &amp; Installers</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/mirrors-glass.html"><span>🔧 Mirrors &amp; Glass</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/masonry-contractors.html"><span>🧱 Masonry Contractors</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/closet-systems-organizers-shelving.html"><span>🔧 Closet Systems, Organizers &amp; Shelving</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/recycling-services.html"><span>🔧 Recycling Services</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/survey-services.html"><span>🔧 Survey Services</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/plumbing-suppliers.html"><span>🔧 Plumbing Suppliers</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/rental-tools-equipment-supplies.html"><span>🔧 Rental Tools, Equipment &amp; Supplies</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/appliances.html"><span>🔧 Appliances</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/asphalt-paving-repairs.html"><span>🔧 Asphalt Paving &amp; Repairs</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/log-home-builders.html"><span>🔧 Log Home Builders</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/storage-rental.html"><span>🔧 Storage - Rental</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/insurance-restoration-mitigation.html"><span>🔧 Insurance Restoration &amp; Mitigation</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/hot-tubs-spas.html"><span>🔧 Hot Tubs / Spas</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/septic-pumping.html"><span>🔧 Septic Pumping</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/propane-home-heating-oil.html"><span>🔧 Propane &amp; Home Heating Oil</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/autotruckequipment-sales-leasing.html"><span>🔧 Auto/Truck/Equipment Sales &amp; Leasing</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/attorneys.html"><span>🔧 Attorneys</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/legal-services.html"><span>🔧 Legal Services</span><span class="ac-count">2</span></a>
-<a class="all-cats-link" href="category/health-care.html"><span>🔧 Health Care</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/security-systems.html"><span>🔧 Security Systems</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/skylights.html"><span>🔧 Skylights</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/electrical-suppliers.html"><span>🔧 Electrical Suppliers</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/tree-removal-service.html"><span>🔧 Tree Removal Service</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/welding-fabrication.html"><span>🔧 Welding &amp; Fabrication</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/structural-wall-panels.html"><span>🔧 Structural Wall Panels</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/water-heaters.html"><span>🔥 Water Heaters</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/environmental-testing-consulting.html"><span>🔧 Environmental Testing &amp; Consulting</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/home-inspection-services.html"><span>🔧 Home Inspection Services</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/computer-products-and-services.html"><span>🔧 Computer Products and Services</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/modular-and-manufactured-homes.html"><span>🔧 Modular and Manufactured Homes</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/crane-service-rental.html"><span>🔧 Crane Service &amp; Rental</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/acoustic-ceilings.html"><span>🔧 Acoustic Ceilings</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/lawn-turf-care.html"><span>🔧 Lawn &amp; Turf Care</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/painting-wallpaper-suppliers.html"><span>🔧 Painting &amp; Wallpaper Suppliers</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/fencing.html"><span>🔧 Fencing</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/skilled-trade-staffing.html"><span>🔧 Skilled Trade Staffing</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/temporary-staffing.html"><span>🔧 Temporary Staffing</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/blueprints.html"><span>🔧 Blueprints</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/seawalls.html"><span>🔧 Seawalls</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/construction-waste-removal.html"><span>🔧 Construction Waste Removal</span><span class="ac-count">1</span></a>
-<a class="all-cats-link" href="category/civil-engineering.html"><span>🔧 Civil Engineering</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/building-contractors"><span>🏠 Building Contractors</span><span class="ac-count">112</span></a>
+<a class="all-cats-link" href="category/remodeling-contractors"><span>🔨 Remodeling Contractors</span><span class="ac-count">65</span></a>
+<a class="all-cats-link" href="category/building-materials-retail"><span>🏪 Building Materials - Retail</span><span class="ac-count">17</span></a>
+<a class="all-cats-link" href="category/kitchen-bath"><span>🍳 Kitchen &amp; Bath</span><span class="ac-count">15</span></a>
+<a class="all-cats-link" href="category/windows-doors"><span>🪟 Windows &amp; Doors</span><span class="ac-count">14</span></a>
+<a class="all-cats-link" href="category/roofing"><span>🏗️ Roofing</span><span class="ac-count">13</span></a>
+<a class="all-cats-link" href="category/banking-mortgage"><span>🏦 Banking &amp; Mortgage</span><span class="ac-count">13</span></a>
+<a class="all-cats-link" href="category/siding-contractors"><span>🧱 Siding Contractors</span><span class="ac-count">12</span></a>
+<a class="all-cats-link" href="category/mortgage-banking-construction-lending"><span>💰 Mortgage Banking - Construction Lending</span><span class="ac-count">12</span></a>
+<a class="all-cats-link" href="category/cabinetry-whole-house"><span>🗄️ Cabinetry - Whole House</span><span class="ac-count">12</span></a>
+<a class="all-cats-link" href="category/insurance"><span>🛡️ Insurance</span><span class="ac-count">11</span></a>
+<a class="all-cats-link" href="category/excavating"><span>🚜 Excavating</span><span class="ac-count">11</span></a>
+<a class="all-cats-link" href="category/building-materials-wholesale"><span>🪵 Building Materials - Wholesale</span><span class="ac-count">11</span></a>
+<a class="all-cats-link" href="category/painting-wallpaper-contractors"><span>🎨 Painting &amp; Wallpaper Contractors</span><span class="ac-count">10</span></a>
+<a class="all-cats-link" href="category/electrical-contractors"><span>⚡ Electrical Contractors</span><span class="ac-count">9</span></a>
+<a class="all-cats-link" href="category/decks"><span>🪑 Decks</span><span class="ac-count">9</span></a>
+<a class="all-cats-link" href="category/architectural-design-services"><span>🔧 Architectural  &amp; Design Services</span><span class="ac-count">9</span></a>
+<a class="all-cats-link" href="category/real-estate-development"><span>🏘️ Real Estate Development</span><span class="ac-count">8</span></a>
+<a class="all-cats-link" href="category/interior-design-staging"><span>🔧 Interior Design &amp; Staging</span><span class="ac-count">8</span></a>
+<a class="all-cats-link" href="category/landscaping-gardening-contractors"><span>🔧 Landscaping &amp; Gardening Contractors</span><span class="ac-count">8</span></a>
+<a class="all-cats-link" href="category/landscaping-design-services"><span>🔧 Landscaping Design Services</span><span class="ac-count">8</span></a>
+<a class="all-cats-link" href="category/hvac-contractors"><span>❄️ HVAC Contractors</span><span class="ac-count">7</span></a>
+<a class="all-cats-link" href="category/framing-contractors"><span>🔧 Framing Contractors</span><span class="ac-count">7</span></a>
+<a class="all-cats-link" href="category/advertising-marketing-public-relations"><span>🔧 Advertising, Marketing &amp; Public Relations</span><span class="ac-count">6</span></a>
+<a class="all-cats-link" href="category/hardscape-installation-suppliers"><span>🔧 Hardscape Installation &amp; Suppliers</span><span class="ac-count">6</span></a>
+<a class="all-cats-link" href="category/cleaning"><span>🔧 Cleaning</span><span class="ac-count">6</span></a>
+<a class="all-cats-link" href="category/concrete-floors-epoxy-resurfacing-polishing"><span>🔧 Concrete Floors - Epoxy, Resurfacing, &amp; Polishing</span><span class="ac-count">6</span></a>
+<a class="all-cats-link" href="category/insulation-contractors-installers"><span>🧤 Insulation Contractors &amp; Installers</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/lighting"><span>💡 Lighting</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/printing"><span>🔧 Printing</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/real-estate-broker"><span>🔧 Real Estate Broker</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/affordable-housing-non-profit"><span>🤝 Affordable Housing - Non-Profit</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/floor-coverings-hardwood-floors"><span>🔧 Floor Coverings &amp; Hardwood Floors</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/plumbing-contractors"><span>🔧 Plumbing Contractors</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/stone-stone-veneer-suppliers"><span>🔧 Stone &amp; Stone Veneer Suppliers</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/land-developers"><span>🗺️ Land Developers</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/concrete-foundations-poured-walls-precast"><span>🔧 Concrete - Foundations, Poured Walls, &amp; Precast</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/financial-advisors"><span>🔧 Financial Advisors</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/restoration-fire-water"><span>🔧 Restoration - Fire &amp; Water</span><span class="ac-count">5</span></a>
+<a class="all-cats-link" href="category/gutters"><span>💧 Gutters</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/handyman-services"><span>🔧 Handyman Services</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/education-training"><span>🔧 Education &amp; Training</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/demolition-contractors"><span>🏗️ Demolition Contractors</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/remodeling-suppliers"><span>🔧 Remodeling Suppliers</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/waste-disposal"><span>🔧 Waste Disposal</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/tile"><span>🔧 Tile</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/accountants-consultants"><span>🔧 Accountants &amp; Consultants</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/web-internet-development"><span>🔧 Web &amp; Internet Development</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/countertops"><span>🔧 Countertops</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/trucking-sand-gravel"><span>🔧 Trucking - Sand &amp; Gravel</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/pole-buildings-garages"><span>🏚️ Pole Buildings &amp; Garages</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/fireplaces"><span>🔥 Fireplaces</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/garage-doors"><span>🚗 Garage Doors</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/trim-finish-carpentry"><span>🪚 Trim &amp; Finish Carpentry</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/moving-storage"><span>🔧 Moving &amp; Storage</span><span class="ac-count">4</span></a>
+<a class="all-cats-link" href="category/home-theater-and-sound-system"><span>🔧 Home Theater and Sound System</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/signs"><span>🔧 Signs</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/furniture"><span>🔧 Furniture</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/trusses"><span>🔧 Trusses</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/utilities"><span>🔧 Utilities</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/planning-design-and-visualization"><span>🔧 Planning, Design and Visualization</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/irrigation"><span>🔧 Irrigation</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/timber-frame-manufacturer"><span>🔧 Timber Frame Manufacturer</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/water-treatment"><span>🔧 Water Treatment</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/home-automation"><span>📱 Home Automation</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/engineering-consultants"><span>🔧 Engineering Consultants</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/graphic-design"><span>🔧 Graphic Design</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/retaining-walls"><span>🔧 Retaining Walls</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/drywall-contractors"><span>🔧 Drywall Contractors</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/swimming-pools"><span>🔧 Swimming Pools</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/portable-toilets"><span>🔧 Portable Toilets</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/millwork-contractors"><span>🔧 Millwork Contractors</span><span class="ac-count">3</span></a>
+<a class="all-cats-link" href="category/energy-consulting"><span>🔧 Energy Consulting</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/sewer-water-installation"><span>🔧 Sewer &amp; Water Installation</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/title-insurance"><span>🔧 Title Insurance</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/windows-coverings-treatments-or-film-installation"><span>🔧 Windows - Coverings, Treatments, &amp;/or Film Installation</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/well-drilling"><span>🔧 Well Drilling</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/glass-contractors-installers"><span>🔧 Glass Contractors &amp; Installers</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/mirrors-glass"><span>🔧 Mirrors &amp; Glass</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/masonry-contractors"><span>🧱 Masonry Contractors</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/closet-systems-organizers-shelving"><span>🔧 Closet Systems, Organizers &amp; Shelving</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/recycling-services"><span>🔧 Recycling Services</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/survey-services"><span>🔧 Survey Services</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/plumbing-suppliers"><span>🔧 Plumbing Suppliers</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/rental-tools-equipment-supplies"><span>🔧 Rental Tools, Equipment &amp; Supplies</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/appliances"><span>🔧 Appliances</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/asphalt-paving-repairs"><span>🔧 Asphalt Paving &amp; Repairs</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/log-home-builders"><span>🔧 Log Home Builders</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/storage-rental"><span>🔧 Storage - Rental</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/insurance-restoration-mitigation"><span>🔧 Insurance Restoration &amp; Mitigation</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/hot-tubs-spas"><span>🔧 Hot Tubs / Spas</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/septic-pumping"><span>🔧 Septic Pumping</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/propane-home-heating-oil"><span>🔧 Propane &amp; Home Heating Oil</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/autotruckequipment-sales-leasing"><span>🔧 Auto/Truck/Equipment Sales &amp; Leasing</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/attorneys"><span>🔧 Attorneys</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/legal-services"><span>🔧 Legal Services</span><span class="ac-count">2</span></a>
+<a class="all-cats-link" href="category/health-care"><span>🔧 Health Care</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/security-systems"><span>🔧 Security Systems</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/skylights"><span>🔧 Skylights</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/electrical-suppliers"><span>🔧 Electrical Suppliers</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/tree-removal-service"><span>🔧 Tree Removal Service</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/welding-fabrication"><span>🔧 Welding &amp; Fabrication</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/structural-wall-panels"><span>🔧 Structural Wall Panels</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/water-heaters"><span>🔥 Water Heaters</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/environmental-testing-consulting"><span>🔧 Environmental Testing &amp; Consulting</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/home-inspection-services"><span>🔧 Home Inspection Services</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/computer-products-and-services"><span>🔧 Computer Products and Services</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/modular-and-manufactured-homes"><span>🔧 Modular and Manufactured Homes</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/crane-service-rental"><span>🔧 Crane Service &amp; Rental</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/acoustic-ceilings"><span>🔧 Acoustic Ceilings</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/lawn-turf-care"><span>🔧 Lawn &amp; Turf Care</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/painting-wallpaper-suppliers"><span>🔧 Painting &amp; Wallpaper Suppliers</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/fencing"><span>🔧 Fencing</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/skilled-trade-staffing"><span>🔧 Skilled Trade Staffing</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/temporary-staffing"><span>🔧 Temporary Staffing</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/blueprints"><span>🔧 Blueprints</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/seawalls"><span>🔧 Seawalls</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/construction-waste-removal"><span>🔧 Construction Waste Removal</span><span class="ac-count">1</span></a>
+<a class="all-cats-link" href="category/civil-engineering"><span>🔧 Civil Engineering</span><span class="ac-count">1</span></a>
 
 </div>
 <div class="no-results" id="noResults" style="display:none;"><h3>No categories found</h3><p>Try a different search term.</p></div>
@@ -1664,7 +1661,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="cta-inner">
   <h2>Are You a Builder or Contractor?</h2>
   <p>Get listed in Northwest Michigan's most comprehensive building directory. Reach homeowners actively planning new builds and renovations.</p>
-  <a href="claim.html" class="btn-primary">Get Listed</a>
+  <a href="claim" class="btn-primary">Get Listed</a>
 </div>
 </section>
 <footer><div class="footer-inner">
@@ -1673,12 +1670,12 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <div class="logo-text"><span class="logo-main">Grand Traverse Builders</span><span class="logo-sub">Home Building Directory</span></div>
     <p>Your comprehensive guide to home builders, contractors, and skilled trades across Northwest Michigan's 8 counties.</p>
   </div>
-  <div class="footer-col"><h4>Top Trades</h4><ul><li><a href="category/building-contractors.html">Home Builders</a></li><li><a href="category/remodeling-contractors.html">Remodeling</a></li><li><a href="category/building-materials-retail.html">Materials (Retail)</a></li><li><a href="category/kitchen-bath.html">Kitchen & Bath</a></li><li><a href="category/windows-doors.html">Windows & Doors</a></li><li><a href="category/roofing.html">Roofing</a></li></ul></div>
+  <div class="footer-col"><h4>Top Trades</h4><ul><li><a href="category/building-contractors">Home Builders</a></li><li><a href="category/remodeling-contractors">Remodeling</a></li><li><a href="category/building-materials-retail">Materials (Retail)</a></li><li><a href="category/kitchen-bath">Kitchen & Bath</a></li><li><a href="category/windows-doors">Windows & Doors</a></li><li><a href="category/roofing">Roofing</a></li></ul></div>
   <div class="footer-col"><h4>Resources</h4><ul>
-    <li><a href="categories.html">All Categories</a></li>
-    <li><a href="plan-my-build.html">Plan My Build</a></li>
+    <li><a href="categories">All Categories</a></li>
+    <li><a href="plan-my-build">Plan My Build</a></li>
     <li><a href="blog/">Building Guides</a></li>
-    <li><a href="blog/building-permits-grand-traverse-county-guide.html">Permit Info</a></li>
+    <li><a href="blog/building-permits-grand-traverse-county-guide">Permit Info</a></li>
   </ul></div>
   <div class="footer-col"><h4>Company</h4><ul>
     <li><a href="#">About Us</a></li>

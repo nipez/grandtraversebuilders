@@ -1,0 +1,5 @@
+# Keep .html URLs redirecting to the extensionless finals Google should index.
+# Matches current production 308 behavior on Cloudflare Pages.
+# A single splat greedily matches nested paths (e.g. /category/foo.html → /category/foo).
+/*.html /:splat 308
+/blog /blog/ 308
