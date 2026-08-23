@@ -8,12 +8,12 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Log Home Builders — Grand Traverse Builders Directory</title>
 <meta content="Find 2 log home builders in Northwest Michigan. Browse verified contractors in Tustin and surrounding areas." name="description"/>
-<link rel="canonical" href="https://grandtraversebuilders.com/category/log-home-builders.html"/>
+<link rel="canonical" href="https://grandtraversebuilders.com/category/log-home-builders"/>
 <!-- Open Graph -->
 <meta property="og:title" content="Log Home Builders — Grand Traverse Builders Directory"/>
 <meta property="og:description" content="Find 2 log home builders in Northwest Michigan. Browse verified contractors in Tustin and surrounding areas."/>
 <meta property="og:type" content="website"/>
-<meta property="og:url" content="https://grandtraversebuilders.com/category/log-home-builders.html"/>
+<meta property="og:url" content="https://grandtraversebuilders.com/category/log-home-builders"/>
 <meta property="og:site_name" content="Grand Traverse Builders"/>
 <meta property="og:locale" content="en_US"/>
 <!-- Twitter -->
@@ -24,7 +24,7 @@
 <meta name="geo.region" content="US-MI"/>
 <meta name="geo.placename" content="Traverse City, Michigan"/>
 <!-- Schema -->
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":null},{"@type":"ListItem","position":2,"name":"Categories","item":"https://grandtraversebuilders.com/categories.html"},{"@type":"ListItem","position":3,"name":"Log Home Builders","item":"https://grandtraversebuilders.com/category/log-home-builders.html"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"ItemList","name":"Log Home Builders in Northwest Michigan","description":"Directory of 2 log home builders serving Northwest Michigan","numberOfItems":2,"itemListElement":[{"@type":"ListItem","position":1,"name":"Natural Log Cabins","url":"https://grandtraversebuilders.com/business/natural-log-cabins.html"},{"@type":"ListItem","position":2,"name":"Vermont Timber Frames Inc","url":"https://grandtraversebuilders.com/business/vermont-timber-frames-inc.html"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":null},{"@type":"ListItem","position":2,"name":"Categories","item":"https://grandtraversebuilders.com/categories"},{"@type":"ListItem","position":3,"name":"Log Home Builders","item":"https://grandtraversebuilders.com/category/log-home-builders"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"ItemList","name":"Log Home Builders in Northwest Michigan","description":"Directory of 2 log home builders serving Northwest Michigan","numberOfItems":2,"itemListElement":[{"@type":"ListItem","position":1,"name":"Natural Log Cabins","url":"https://grandtraversebuilders.com/business/natural-log-cabins"},{"@type":"ListItem","position":2,"name":"Vermont Timber Frames Inc","url":"https://grandtraversebuilders.com/business/vermont-timber-frames-inc"}]}</script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
 <style>
@@ -799,7 +799,7 @@ function getPageType(){
 }
 function getCurrentBusinessSlug(){
   const h=window.location.pathname+window.location.href;
-  const m=h.match(/business\/([^/.?#]+)\.html/);
+  const m=h.match(/business\/([^/.?#]+)/);
   return m?m[1]:null;
 }
 function getCurrentBusinessName(){
@@ -900,7 +900,7 @@ function renderWizard(){
           h+=`<div class="wz-step done" data-step-id="${step.id}">
             <div class="wz-step-check">✓</div>
             <div class="wz-step-info"><div class="wz-step-label">${step.label}</div>
-              <a href="${prefix}business/${sel.slug}.html" class="wz-step-selected">${sel.name}</a></div>
+              <a href="${prefix}business/${sel.slug}" class="wz-step-selected">${sel.name}</a></div>
             <button class="wz-step-remove" onclick="removeFromStep('${step.id}')">✕</button></div>`;
         } else {
           let addBtn='';
@@ -910,7 +910,7 @@ function renderWizard(){
           h+=`<div class="wz-step${step.optional?' optional':''}" data-step-id="${step.id}">
             <div class="wz-step-num">${step.icon}</div>
             <div class="wz-step-info"><div class="wz-step-label">${step.label}${step.optional?' <span class="wz-opt">(optional)</span>':''}</div>
-              <a href="${prefix}category/${catSlug}.html?step=${step.id}" class="wz-step-browse">Browse ${step.label} →</a></div>
+              <a href="${prefix}category/${catSlug}?step=${step.id}" class="wz-step-browse">Browse ${step.label} →</a></div>
             ${addBtn}</div>`;
         }
       });
@@ -943,11 +943,8 @@ function decodePlan(encoded){
   }catch(e){return null;}
 }
 function getShareUrl(){
-  const base=window.location.href.split('?')[0].split('#')[0];
-  // Point to index.html (or plan.html)
-  const root=getRoot();
-  const origin=base.substring(0,base.lastIndexOf('/')+1);
-  return origin+root+'index.html?shared_plan='+encodePlan();
+  // Extensionless site root with shared_plan query
+  return window.location.origin+'/?shared_plan='+encodePlan();
 }
 
 window.openShareModal=function(){
@@ -1029,7 +1026,7 @@ function renderFavPanel(){
     h+=`<div class="fav-list">`;
     favs.forEach(slug=>{
       const name=slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-      h+=`<a href="${prefix}business/${slug}.html" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
+      h+=`<a href="${prefix}business/${slug}" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
     });
     h+=`</div><div style="padding:16px 20px;"><button class="wz-reset" style="width:100%;text-align:center;" onclick="if(confirm('Clear all saved?')){saveFavorites([]);updateAllHearts();updateFavCount();renderFavPanel();}">Clear All Saved</button></div>`;
   }
@@ -1077,7 +1074,7 @@ function addPlanButtonsToCards(){
   document.querySelectorAll('.builder-card').forEach(card=>{
     if(card.querySelector('.card-plan-btn'))return;
     const href=card.getAttribute('href')||'';
-    const m=href.match(/business\/([^/.?#]+)\.html/);
+    const m=href.match(/business\/([^/.?#]+)/);
     if(!m)return;
     const slug=m[1];
     const nameEl=card.querySelector('.card-name');
@@ -1346,7 +1343,7 @@ function addHeartsToCards(){
   document.querySelectorAll('.builder-card').forEach(card=>{
     if(card.querySelector('.heart-btn'))return;
     const href=card.getAttribute('href')||'';
-    const m=href.match(/business\/([^/.?#]+)\.html/);if(!m)return;
+    const m=href.match(/business\/([^/.?#]+)/);if(!m)return;
     const slug=m[1];
     const btn=document.createElement('button');
     btn.className='heart-btn'+(isFavorite(slug)?' is-fav':'');
@@ -1433,7 +1430,7 @@ function showSharedPlanOverlay(plan){
       <div class="shared-phase-label">${phase.phase}</div>`;
     filled.forEach(step=>{
       const sel=selections[step.id];
-      h+=`<a href="${prefix}business/${sel.slug}.html" class="shared-vendor">
+      h+=`<a href="${prefix}business/${sel.slug}" class="shared-vendor">
         <div class="shared-vendor-icon">${step.icon}</div>
         <div class="shared-vendor-info">
           <div class="shared-vendor-role">${step.label}</div>
@@ -1503,10 +1500,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <ul class="nav-links">
   <li><a href="../#trades">Trades</a></li>
   <li><a href="../#directory">Directory</a></li>
-  <li><a href="../categories.html">All Categories</a></li>
+  <li><a href="../categories">All Categories</a></li>
   <li><a href="../blog/">Blog</a></li>
-  <li><a href="../plan-my-build.html">Plan My Build</a></li>
-  <li><a class="nav-cta" href="../claim.html">List Your Business</a></li>
+  <li><a href="../plan-my-build">Plan My Build</a></li>
+  <li><a class="nav-cta" href="../claim">List Your Business</a></li>
 </ul>
 <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">
   <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -1515,7 +1512,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 <div class="breadcrumbs">
   <a href="../">Home</a><span class="sep">/</span>
-  <a href="../categories.html">Categories</a><span class="sep">/</span>
+  <a href="../categories">Categories</a><span class="sep">/</span>
   <span class="current">Log Home Builders</span>
 </div>
 
@@ -1550,7 +1547,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="directory-inner">
   <div class="results-bar"><div class="results-count" id="resultsCount">Showing <strong>2</strong> businesses in Log Home Builders</div></div>
   <div class="featured-row promo-only">
-  <a class="featured-card featured-promo" href="../claim.html">
+  <a class="featured-card featured-promo" href="../claim">
     <div class="promo-icon">📣</div>
     <div class="promo-title">Feature Your Business Here</div>
     <div class="promo-desc">Get premium placement at the top of <strong>Log Home Builders</strong> and reach homeowners actively searching for contractors.</div>
@@ -1559,7 +1556,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </div>
   <div class="builder-grid" id="catGrid"></div>
   <div class="no-results" id="noResults"><h3>No businesses found</h3><p>Try a different search term or city filter.</p><button onclick="resetFilters()">Show All</button></div>
-  <div style="margin-top:40px;"><div class="section-tag">Related Trades</div><div class="all-cats-grid" style="margin-top:12px;"><a class="all-cats-link" href="building-contractors.html"><span>🏠 Building Contractors</span><span class="ac-count">1</span></a><a class="all-cats-link" href="timber-frame-manufacturer.html"><span>🔧 Timber Frame Manufacturer</span><span class="ac-count">1</span></a></div></div>
+  <div style="margin-top:40px;"><div class="section-tag">Related Trades</div><div class="all-cats-grid" style="margin-top:12px;"><a class="all-cats-link" href="building-contractors"><span>🏠 Building Contractors</span><span class="ac-count">1</span></a><a class="all-cats-link" href="timber-frame-manufacturer"><span>🔧 Timber Frame Manufacturer</span><span class="ac-count">1</span></a></div></div>
 </div>
 </section>
 
@@ -1575,7 +1572,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="cta-inner">
   <h2>Are You a Builder or Contractor?</h2>
   <p>Get listed in Northwest Michigan's most comprehensive building directory. Reach homeowners actively planning new builds and renovations.</p>
-  <a href="../claim.html" class="btn-primary">Get Listed</a>
+  <a href="../claim" class="btn-primary">Get Listed</a>
 </div>
 </section>
 <footer><div class="footer-inner">
@@ -1584,12 +1581,12 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <div class="logo-text"><span class="logo-main">Grand Traverse Builders</span><span class="logo-sub">Home Building Directory</span></div>
     <p>Your comprehensive guide to home builders, contractors, and skilled trades across Northwest Michigan's 8 counties.</p>
   </div>
-  <div class="footer-col"><h4>Top Trades</h4><ul><li><a href="../category/building-contractors.html">Home Builders</a></li><li><a href="../category/remodeling-contractors.html">Remodeling</a></li><li><a href="../category/building-materials-retail.html">Materials (Retail)</a></li><li><a href="../category/kitchen-bath.html">Kitchen & Bath</a></li><li><a href="../category/windows-doors.html">Windows & Doors</a></li><li><a href="../category/roofing.html">Roofing</a></li></ul></div>
+  <div class="footer-col"><h4>Top Trades</h4><ul><li><a href="../category/building-contractors">Home Builders</a></li><li><a href="../category/remodeling-contractors">Remodeling</a></li><li><a href="../category/building-materials-retail">Materials (Retail)</a></li><li><a href="../category/kitchen-bath">Kitchen & Bath</a></li><li><a href="../category/windows-doors">Windows & Doors</a></li><li><a href="../category/roofing">Roofing</a></li></ul></div>
   <div class="footer-col"><h4>Resources</h4><ul>
-    <li><a href="../categories.html">All Categories</a></li>
-    <li><a href="../plan-my-build.html">Plan My Build</a></li>
+    <li><a href="../categories">All Categories</a></li>
+    <li><a href="../plan-my-build">Plan My Build</a></li>
     <li><a href="../blog/">Building Guides</a></li>
-    <li><a href="../blog/building-permits-grand-traverse-county-guide.html">Permit Info</a></li>
+    <li><a href="../blog/building-permits-grand-traverse-county-guide">Permit Info</a></li>
   </ul></div>
   <div class="footer-col"><h4>Company</h4><ul>
     <li><a href="#">About Us</a></li>
@@ -1620,7 +1617,7 @@ function renderCards(list){
   grid.innerHTML=list.map(b=>{
     const initials=getInitials(b.n);
     const primary=b.c.length?b.c[0].replace(' Contractors','').replace(' & Design Services',''):'';
-    return`<a class="builder-card" href="../business/${b.s}.html">
+    return`<a class="builder-card" href="../business/${b.s}">
       <div class="card-header">
         <div class="card-avatar" style="background:#4A5A6A">${initials}</div>
         <div class="card-info">

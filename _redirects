@@ -1,0 +1,16 @@
+# Pretty-URL redirects (Pages also does .html → extensionless natively;
+# these keep behavior explicit under Git deploys and cover edge cases).
+#
+# Static rules first: a greedy /*.html splat would wrongly map
+# /index.html → /index instead of /.
+/index.html / 308
+/index.html/ / 308
+/blog/index.html /blog/ 308
+/blog/index.html/ /blog/ 308
+/index.php / 308
+/blog /blog/ 308
+#
+# Trailing slash after .html (e.g. /categories.html/) used to miss the
+# pretty-URL redirect and SPA-fallback to the homepage.
+/*.html/ /:splat 308
+/*.html /:splat 308

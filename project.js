@@ -52,7 +52,7 @@ function getPageType(){
 }
 function getCurrentBusinessSlug(){
   const h=window.location.pathname+window.location.href;
-  const m=h.match(/business\/([^/.?#]+)\.html/);
+  const m=h.match(/business\/([^/.?#]+)/);
   return m?m[1]:null;
 }
 function getCurrentBusinessName(){
@@ -153,7 +153,7 @@ function renderWizard(){
           h+=`<div class="wz-step done" data-step-id="${step.id}">
             <div class="wz-step-check">✓</div>
             <div class="wz-step-info"><div class="wz-step-label">${step.label}</div>
-              <a href="${prefix}business/${sel.slug}.html" class="wz-step-selected">${sel.name}</a></div>
+              <a href="${prefix}business/${sel.slug}" class="wz-step-selected">${sel.name}</a></div>
             <button class="wz-step-remove" onclick="removeFromStep('${step.id}')">✕</button></div>`;
         } else {
           let addBtn='';
@@ -163,7 +163,7 @@ function renderWizard(){
           h+=`<div class="wz-step${step.optional?' optional':''}" data-step-id="${step.id}">
             <div class="wz-step-num">${step.icon}</div>
             <div class="wz-step-info"><div class="wz-step-label">${step.label}${step.optional?' <span class="wz-opt">(optional)</span>':''}</div>
-              <a href="${prefix}category/${catSlug}.html?step=${step.id}" class="wz-step-browse">Browse ${step.label} →</a></div>
+              <a href="${prefix}category/${catSlug}?step=${step.id}" class="wz-step-browse">Browse ${step.label} →</a></div>
             ${addBtn}</div>`;
         }
       });
@@ -196,11 +196,8 @@ function decodePlan(encoded){
   }catch(e){return null;}
 }
 function getShareUrl(){
-  const base=window.location.href.split('?')[0].split('#')[0];
-  // Point to index.html (or plan.html)
-  const root=getRoot();
-  const origin=base.substring(0,base.lastIndexOf('/')+1);
-  return origin+root+'index.html?shared_plan='+encodePlan();
+  // Extensionless site root with shared_plan query
+  return window.location.origin+'/?shared_plan='+encodePlan();
 }
 
 window.openShareModal=function(){
@@ -282,7 +279,7 @@ function renderFavPanel(){
     h+=`<div class="fav-list">`;
     favs.forEach(slug=>{
       const name=slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-      h+=`<a href="${prefix}business/${slug}.html" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
+      h+=`<a href="${prefix}business/${slug}" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
     });
     h+=`</div><div style="padding:16px 20px;"><button class="wz-reset" style="width:100%;text-align:center;" onclick="if(confirm('Clear all saved?')){saveFavorites([]);updateAllHearts();updateFavCount();renderFavPanel();}">Clear All Saved</button></div>`;
   }
@@ -330,7 +327,7 @@ function addPlanButtonsToCards(){
   document.querySelectorAll('.builder-card').forEach(card=>{
     if(card.querySelector('.card-plan-btn'))return;
     const href=card.getAttribute('href')||'';
-    const m=href.match(/business\/([^/.?#]+)\.html/);
+    const m=href.match(/business\/([^/.?#]+)/);
     if(!m)return;
     const slug=m[1];
     const nameEl=card.querySelector('.card-name');
@@ -599,7 +596,7 @@ function addHeartsToCards(){
   document.querySelectorAll('.builder-card').forEach(card=>{
     if(card.querySelector('.heart-btn'))return;
     const href=card.getAttribute('href')||'';
-    const m=href.match(/business\/([^/.?#]+)\.html/);if(!m)return;
+    const m=href.match(/business\/([^/.?#]+)/);if(!m)return;
     const slug=m[1];
     const btn=document.createElement('button');
     btn.className='heart-btn'+(isFavorite(slug)?' is-fav':'');
@@ -686,7 +683,7 @@ function showSharedPlanOverlay(plan){
       <div class="shared-phase-label">${phase.phase}</div>`;
     filled.forEach(step=>{
       const sel=selections[step.id];
-      h+=`<a href="${prefix}business/${sel.slug}.html" class="shared-vendor">
+      h+=`<a href="${prefix}business/${sel.slug}" class="shared-vendor">
         <div class="shared-vendor-icon">${step.icon}</div>
         <div class="shared-vendor-info">
           <div class="shared-vendor-role">${step.label}</div>
