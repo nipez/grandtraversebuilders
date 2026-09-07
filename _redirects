@@ -5,31 +5,20 @@
 # /index.html → /index instead of /.
 #
 # ASCII slug migration for umlaut business pages (NFC + NFD + .html).
-# Percent-encoded sources distinguish NFC vs NFD; Unicode sources cover decoded matches.
+# Use percent-encoded sources so NFC (%C3%B6 / %C3%A4) and NFD (%CC%88)
+# stay distinct; Pages normalizes literal Unicode to the same encodings.
 /business/h%C3%B6rmann-innovative-door-systems /business/hormann-innovative-door-systems 308
 /business/h%C3%B6rmann-innovative-door-systems.html /business/hormann-innovative-door-systems 308
 /business/h%C3%B6rmann-innovative-door-systems/ /business/hormann-innovative-door-systems 308
 /business/ho%CC%88rmann-innovative-door-systems /business/hormann-innovative-door-systems 308
 /business/ho%CC%88rmann-innovative-door-systems.html /business/hormann-innovative-door-systems 308
 /business/ho%CC%88rmann-innovative-door-systems/ /business/hormann-innovative-door-systems 308
-/business/hörmann-innovative-door-systems /business/hormann-innovative-door-systems 308
-/business/hörmann-innovative-door-systems.html /business/hormann-innovative-door-systems 308
-/business/hörmann-innovative-door-systems/ /business/hormann-innovative-door-systems 308
-/business/hörmann-innovative-door-systems /business/hormann-innovative-door-systems 308
-/business/hörmann-innovative-door-systems.html /business/hormann-innovative-door-systems 308
-/business/hörmann-innovative-door-systems/ /business/hormann-innovative-door-systems 308
 /business/kr%C3%A4m-construction-design /business/kram-construction-design 308
 /business/kr%C3%A4m-construction-design.html /business/kram-construction-design 308
 /business/kr%C3%A4m-construction-design/ /business/kram-construction-design 308
 /business/kra%CC%88m-construction-design /business/kram-construction-design 308
 /business/kra%CC%88m-construction-design.html /business/kram-construction-design 308
 /business/kra%CC%88m-construction-design/ /business/kram-construction-design 308
-/business/kräm-construction-design /business/kram-construction-design 308
-/business/kräm-construction-design.html /business/kram-construction-design 308
-/business/kräm-construction-design/ /business/kram-construction-design 308
-/business/kräm-construction-design /business/kram-construction-design 308
-/business/kräm-construction-design.html /business/kram-construction-design 308
-/business/kräm-construction-design/ /business/kram-construction-design 308
 #
 # Bare /category directory (no index) → categories listing
 /category /categories 301
