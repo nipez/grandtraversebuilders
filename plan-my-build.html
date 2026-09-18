@@ -900,7 +900,7 @@ function renderWizard(){
           h+=`<div class="wz-step done" data-step-id="${step.id}">
             <div class="wz-step-check">✓</div>
             <div class="wz-step-info"><div class="wz-step-label">${step.label}</div>
-              <a href="${prefix}business/${sel.slug}" class="wz-step-selected">${sel.name}</a></div>
+              <a href="${prefix+'business/'+sel.slug}" class="wz-step-selected">${sel.name}</a></div>
             <button class="wz-step-remove" onclick="removeFromStep('${step.id}')">✕</button></div>`;
         } else {
           let addBtn='';
@@ -1026,7 +1026,7 @@ function renderFavPanel(){
     h+=`<div class="fav-list">`;
     favs.forEach(slug=>{
       const name=slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-      h+=`<a href="${prefix}business/${slug}" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
+      h+=`<a href="${prefix+'business/'+slug}" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
     });
     h+=`</div><div style="padding:16px 20px;"><button class="wz-reset" style="width:100%;text-align:center;" onclick="if(confirm('Clear all saved?')){saveFavorites([]);updateAllHearts();updateFavCount();renderFavPanel();}">Clear All Saved</button></div>`;
   }
@@ -1430,7 +1430,7 @@ function showSharedPlanOverlay(plan){
       <div class="shared-phase-label">${phase.phase}</div>`;
     filled.forEach(step=>{
       const sel=selections[step.id];
-      h+=`<a href="${prefix}business/${sel.slug}" class="shared-vendor">
+      h+=`<a href="${prefix+'business/'+sel.slug}" class="shared-vendor">
         <div class="shared-vendor-icon">${step.icon}</div>
         <div class="shared-vendor-info">
           <div class="shared-vendor-role">${step.label}</div>
@@ -1954,7 +1954,7 @@ function generatePlan(){
       const cards=top.map(b=>{
         const city=getCity(b.a);
         const initials=getInitials(b.n);
-        return`<div class="pmb-rec-card" data-slug="${b.s}"><div class="pmb-rec-avatar">${initials}</div><a href="business/${b.s}" target="_blank" class="pmb-rec-info" style="text-decoration:none;color:inherit;"><div class="pmb-rec-name">${b.n}</div>${city?`<div class="pmb-rec-city">${city}, MI</div>`:''}</a><button class="pmb-add-btn" onclick="event.stopPropagation();addToPlan('${b.s}','${b.n.replace(/'/g,"\\'")}',' ${phase.name}')">+</button></div>`;
+        return`<div class="pmb-rec-card" data-slug="${b.s}"><div class="pmb-rec-avatar">${initials}</div><a href="${'business/'+b.s}" target="_blank" class="pmb-rec-info" style="text-decoration:none;color:inherit;"><div class="pmb-rec-name">${b.n}</div>${city?`<div class="pmb-rec-city">${city}, MI</div>`:''}</a><button class="pmb-add-btn" onclick="event.stopPropagation();addToPlan('${b.s}','${b.n.replace(/'/g,"\\'")}',' ${phase.name}')">+</button></div>`;
       }).join('');
 
       phasesHtml+=`<div class="pmb-phase"><div class="pmb-phase-header"><div class="pmb-phase-num">${i+1}</div><div class="pmb-phase-title">${phase.icon} ${phase.name}</div><div class="pmb-phase-count">${matches.length} contractor${matches.length!==1?'s':''}</div></div><div class="pmb-phase-body"><div class="pmb-phase-desc">${phase.desc}</div><div class="pmb-rec-cards">${cards}</div>${matches.length>6?`<div style="text-align:center;margin-top:12px;"><a href="./#directory" target="_blank" style="font-size:.75rem;color:var(--copper-warm);text-decoration:none;font-weight:500;">View all ${matches.length} in this category →</a></div>`:''}</div></div>`;
