@@ -153,7 +153,7 @@ function renderWizard(){
           h+=`<div class="wz-step done" data-step-id="${step.id}">
             <div class="wz-step-check">✓</div>
             <div class="wz-step-info"><div class="wz-step-label">${step.label}</div>
-              <a href="${prefix}business/${sel.slug}" class="wz-step-selected">${sel.name}</a></div>
+              <a href="${prefix+'business/'+sel.slug}" class="wz-step-selected">${sel.name}</a></div>
             <button class="wz-step-remove" onclick="removeFromStep('${step.id}')">✕</button></div>`;
         } else {
           let addBtn='';
@@ -279,7 +279,7 @@ function renderFavPanel(){
     h+=`<div class="fav-list">`;
     favs.forEach(slug=>{
       const name=slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-      h+=`<a href="${prefix}business/${slug}" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
+      h+=`<a href="${prefix+'business/'+slug}" class="fav-item"><span class="fav-item-name">${name}</span><span class="fav-item-arrow">→</span></a>`;
     });
     h+=`</div><div style="padding:16px 20px;"><button class="wz-reset" style="width:100%;text-align:center;" onclick="if(confirm('Clear all saved?')){saveFavorites([]);updateAllHearts();updateFavCount();renderFavPanel();}">Clear All Saved</button></div>`;
   }
@@ -683,7 +683,7 @@ function showSharedPlanOverlay(plan){
       <div class="shared-phase-label">${phase.phase}</div>`;
     filled.forEach(step=>{
       const sel=selections[step.id];
-      h+=`<a href="${prefix}business/${sel.slug}" class="shared-vendor">
+      h+=`<a href="${prefix+'business/'+sel.slug}" class="shared-vendor">
         <div class="shared-vendor-icon">${step.icon}</div>
         <div class="shared-vendor-info">
           <div class="shared-vendor-role">${step.label}</div>
