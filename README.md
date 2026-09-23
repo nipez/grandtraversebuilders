@@ -16,6 +16,7 @@ Then open the URL `serve` prints (usually http://localhost:3000).
 
 - `index.html` — homepage / directory
 - `categories.html` — all trade categories
+- `search.html` / `search-index.json` — site-wide directory search (`/search?q=`)
 - `claim.html` — claim a listing
 - `plan-my-build.html` — project planner
 - `blog/` — guides
@@ -32,3 +33,11 @@ Then open the URL `serve` prints (usually http://localhost:3000).
 - **Pages.dev:** https://buildnorthernmichigan.pages.dev
 
 Direct Upload originally (not Git-connected). Re-deploy from this repo after connecting the project to GitHub if you want Git-based deploys.
+
+### Regenerating the search index
+
+After changing the businesses list in `index.html`:
+
+```bash
+python3 scripts/build_search_index.py
+```
