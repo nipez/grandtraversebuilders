@@ -1506,7 +1506,9 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 .form-submit{padding:16px 32px;background:var(--copper-warm);color:var(--white);font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:none;border-radius:6px;cursor:pointer;transition:all .3s;}
 .form-submit:hover{background:var(--copper);transform:translateY(-1px);box-shadow:0 6px 20px rgba(193,127,78,0.25);}
+.form-submit:disabled{opacity:.65;cursor:wait;transform:none;box-shadow:none;}
 .form-note{font-size:1.05rem;color:var(--text-soft);text-align:center;margin-top:8px;line-height:1.6;}
+.form-error{display:none;color:#b3261e;font-size:0.95rem;text-align:center;line-height:1.5;margin:0;}
 .claim-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:50px;padding-top:40px;border-top:1px solid rgba(28,43,54,0.06);}
 .benefit-card{text-align:center;padding:24px 16px;}
 .benefit-icon{font-size:1.6rem;margin-bottom:10px;}
@@ -1520,18 +1522,18 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 <div class="top-bar"><span>8 Counties</span> · 379 Builders & Contractors · <span>119 Trade Categories</span> · Serving Northwest Michigan</div>
 <nav id="mainNav"><div class="nav-inner">
-<a class="logo" href="./">
+<a class="logo" href="/">
   <div class="logo-mark"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="position:relative;z-index:1;"><path d="M9 2L2 8h2v7h4v-4h2v4h4V8h2L9 2z" stroke="var(--copper-light)" stroke-width="1.4" fill="none"/></svg></div>
   <div class="logo-text"><span class="logo-main">Grand Traverse Builders</span><span class="logo-sub">Home Building Directory</span></div>
 </a>
 <ul class="nav-links">
-  <li><a href="./#trades">Trades</a></li>
-  <li><a href="./#directory">Directory</a></li>
-  <li><a href="categories">All Categories</a></li>
-    <li><a href="search">Search Directory</a></li>
-  <li><a href="blog/">Blog</a></li>
-  <li><a href="plan-my-build">Plan My Build</a></li>
-  <li><a href="/search">Search</a></li><li><a class="nav-cta" href="claim">List Your Business</a></li>
+  <li><a href="/#trades">Trades</a></li>
+  <li><a href="/#directory">Directory</a></li>
+  <li><a href="/categories">All Categories</a></li>
+    <li><a href="/search">Search Directory</a></li>
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/plan-my-build">Plan My Build</a></li>
+  <li><a href="/search">Search</a></li><li><a class="nav-cta" href="/claim">List Your Business</a></li>
 </ul>
 <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">
   <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -1602,6 +1604,12 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
       <textarea name="description" placeholder="Tell us about your business, specialties, years of experience, service area, etc."></textarea>
     </div>
 
+    <!-- Honeypot: hidden from real users, catches bots. -->
+    <div class="form-group" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;">
+      <label>Company Website</label>
+      <input type="text" name="company_website" tabindex="-1" autocomplete="off"/>
+    </div>
+
     <div class="form-group">
       <label>Listing Type</label>
       <select name="listing_type">
@@ -1611,6 +1619,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     </div>
 
     <button type="submit" class="form-submit">Submit Claim Request</button>
+    <p class="form-error" id="formError" role="alert"></p>
     <p class="form-note">We'll review your submission and reach out within 1–2 business days.<br>Free listings are always free. No credit card required.</p>
   </form>
 
@@ -1625,7 +1634,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <div style="font-size:3rem;margin-bottom:16px;">✓</div>
     <h2>Request Submitted!</h2>
     <p>Thanks for claiming your listing. We'll review your information and get back to you within 1–2 business days to finalize your profile.</p>
-    <a href="./" class="btn-primary" style="margin-top:8px;">Back to Directory</a>
+    <a href="/" class="btn-primary" style="margin-top:8px;">Back to Directory</a>
   </div>
 
 </div>
@@ -1635,7 +1644,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="cta-inner">
   <h2>Are You a Builder or Contractor?</h2>
   <p>Get listed in Northwest Michigan's most comprehensive building directory. Reach homeowners actively planning new builds and renovations.</p>
-  <a href="claim" class="btn-primary">Get Listed</a>
+  <a href="/claim" class="btn-primary">Get Listed</a>
 </div>
 </section>
 <footer><div class="footer-inner">
@@ -1670,17 +1679,35 @@ const params=new URLSearchParams(window.location.search);
 const biz=params.get('business');
 if(biz)document.getElementById('businessName').value=decodeURIComponent(biz);
 
-function handleSubmit(e){
+async function handleSubmit(e){
   e.preventDefault();
   const form=document.getElementById('claimForm');
-  const data=new FormData(form);
-  const entries=Object.fromEntries(data.entries());
-  // Log to console for now — connect to your backend/email service later
-  console.log('Claim submission:',entries);
-  // Show success
-  document.getElementById('formArea').style.display='none';
-  document.getElementById('successMessage').style.display='block';
-  window.scrollTo({top:0,behavior:'smooth'});
+  const btn=form.querySelector('.form-submit');
+  const errEl=document.getElementById('formError');
+  errEl.style.display='none';
+  errEl.textContent='';
+  const entries=Object.fromEntries(new FormData(form).entries());
+  const original=btn.textContent;
+  btn.disabled=true;btn.textContent='Submitting…';
+  try{
+    const res=await fetch('/api/claim',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(entries)
+    });
+    const result=await res.json().catch(()=>({}));
+    if(!res.ok||!result.ok){
+      throw new Error(result.error||'Something went wrong. Please try again.');
+    }
+    if(window.gtbTrack)window.gtbTrack('claim_submit',{trade:entries.trade,listing_type:entries.listing_type});
+    document.getElementById('formArea').style.display='none';
+    document.getElementById('successMessage').style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }catch(err){
+    errEl.textContent=err.message||'Something went wrong. Please try again.';
+    errEl.style.display='block';
+    btn.disabled=false;btn.textContent=original;
+  }
 }
 window.addEventListener('scroll',()=>{document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>10);});
 </script>
