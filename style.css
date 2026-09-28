@@ -630,6 +630,12 @@ footer{background:var(--charcoal);padding:60px 40px 32px;color:rgba(244,241,236,
 .wz-share-bar{padding:16px 20px;border-top:1px solid rgba(28,43,54,0.06);}
 .wz-share-btn{width:100%;padding:13px;background:var(--slate);color:var(--white);border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px;}
 .wz-share-btn:hover{background:#253845;transform:translateY(-1px);box-shadow:0 4px 16px rgba(14,25,32,0.2);}
+.search-card-top{position:relative;}
+.heart-btn.search-heart{top:0;right:0;}
+.page-favorites .fav-page-list{max-width:720px;margin:0 auto;}
+.page-favorites .fav-page-actions{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 8px;}
+.page-favorites .fav-page-actions .wz-share-btn{width:auto;padding:12px 18px;}
+.page-favorites .fav-page-empty{text-align:center;padding:48px 20px;color:var(--text-soft);}
 
 /* SHARE MODAL */
 .share-modal{position:fixed;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;}
