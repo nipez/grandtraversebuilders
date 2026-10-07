@@ -4,5 +4,11 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()
 
+/search
+  X-Robots-Tag: noindex, follow
+
+/search.html
+  X-Robots-Tag: noindex, follow
+
 /project.js
   Cache-Control: public, max-age=3600
