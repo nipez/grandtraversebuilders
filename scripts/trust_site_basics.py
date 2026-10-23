@@ -224,13 +224,16 @@ def about_body(count: int) -> str:
 """
 
 
+CONTACT_EMAIL = "hello@grandtraversebuilders.com"
+CONTACT_MAILTO = f'<a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>'
+
+
 def contact_body() -> str:
-    return """<h2>Business owners</h2>
+    return f"""<h2>Business owners</h2>
 <p>To claim an existing listing, update your information, or request a new listing, use the <a href="/claim">Claim Your Listing</a> form. Submissions go to the site operators through that form — that is the primary contact path for directory businesses today.</p>
 
 <h2>Everyone else</h2>
-<p>Grand Traverse Builders does not publish a public phone number or street address. For general questions about the directory itself, use the claim form and note that your message is not a listing request, or wait for a public contact email once one is published on this page.</p>
-<p class="note">TODO for Nick: supply a public contact email (e.g. hello@grandtraversebuilders.com) to add a mailto link here. No invented phone or address.</p>
+<p>Grand Traverse Builders does not publish a public phone number or street address. For general questions about the directory itself, email {CONTACT_MAILTO}. You can also use the <a href="/claim">claim form</a> and note that your message is not a listing request.</p>
 
 <h2>What we cannot do</h2>
 <ul>
@@ -267,7 +270,7 @@ def privacy_body() -> str:
 <p>Business listings may link to external websites, phone numbers, or map searches. Those destinations have their own privacy practices.</p>
 
 <h2>Contact about privacy</h2>
-<p>Questions about this policy can be sent through the <a href="/claim">claim form</a> (note that it is a privacy inquiry) or via the public contact email once published on the <a href="/contact">Contact</a> page.</p>
+<p>Questions about this policy can be emailed to {CONTACT_MAILTO}, or sent through the <a href="/claim">claim form</a> (note that it is a privacy inquiry). See also the <a href="/contact">Contact</a> page.</p>
 """
 
 
@@ -288,13 +291,13 @@ def write_static_pages(count: int, head_nav: str, footer: str) -> None:
         dict(
             filename="contact.html",
             title="Contact — Grand Traverse Builders",
-            description="Contact Grand Traverse Builders. Business owners: claim or update your listing. No public phone or street address is published.",
+            description="Contact Grand Traverse Builders at hello@grandtraversebuilders.com. Business owners: claim or update your listing. No public phone or street address is published.",
             path="contact",
             page_name="Contact",
             body_class="page-contact",
             tag="Contact",
             h1="Get in touch",
-            hero_desc="Business owners use Claim Your Listing. A public contact email will be added when one is available.",
+            hero_desc=f'Email {CONTACT_MAILTO}. Business owners: use Claim Your Listing.',
             body=contact_body(),
         ),
         dict(
@@ -326,6 +329,7 @@ def write_static_pages(count: int, head_nav: str, footer: str) -> None:
         )
         # New pages should already have correct Company footer links
         html = rewrite_company_footer(html)
+        html = ensure_footer_contact_email(html)
         html = html.replace(
             "379 Builders & Contractors",
             f"{count} Builders & Contractors",
@@ -353,6 +357,26 @@ COMPANY_FOOTER_REPL = (
     "  "
     r"\2"
 )
+
+
+FOOTER_EMAIL_RE = re.compile(
+    r'(<div class="footer-brand">\s*'
+    r'<div class="logo-text">.*?</div>\s*'
+    r"<p>Your comprehensive guide[^<]*</p>\s*)"
+    r"(?:<p><a href=\"mailto:[^\"]+\">[^<]*</a></p>\s*)?"
+    r"(</div>)",
+    re.S,
+)
+
+
+def ensure_footer_contact_email(text: str) -> str:
+    """Idempotently add the public contact mailto under the footer brand blurb."""
+    repl = (
+        r"\1"
+        f"<p><a href=\"mailto:{CONTACT_EMAIL}\">{CONTACT_EMAIL}</a></p>\n"
+        r"  \2"
+    )
+    return FOOTER_EMAIL_RE.sub(repl, text, count=1)
 
 
 def rewrite_company_footer(text: str) -> str:

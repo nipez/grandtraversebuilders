@@ -438,6 +438,7 @@ footer{background:var(--charcoal);padding:60px 40px 32px;color:rgba(244,241,236,
 .footer-brand .logo-main{color:var(--stone);font-size:1.05rem;}
 .footer-brand .logo-sub{color:var(--copper-warm);font-size:.52rem;}
 .footer-brand p{font-size:.82rem;line-height:1.7;margin-top:12px;color:rgba(244,241,236,0.35);}
+.footer-brand a{color:rgba(244,241,236,0.45);text-decoration:none;}.footer-brand a:hover{color:var(--copper-light);}
 .footer-col h4{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--copper);margin-bottom:16px;}
 .footer-col ul{list-style:none;}.footer-col li{margin-bottom:8px;}
 .footer-col a{font-size:.82rem;color:rgba(244,241,236,0.35);text-decoration:none;transition:color .3s;}.footer-col a:hover{color:var(--copper-light);}
