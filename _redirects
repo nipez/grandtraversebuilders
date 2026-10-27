@@ -23,6 +23,16 @@
 # Bare /category directory (no index) → categories listing
 /category /categories 301
 /category/ /categories 301
+#
+# Bare /business directory (no index). Naive crawlers also extract the
+# contiguous "/business/" prefix from JS string concat href builders.
+/business / 301
+/business/ / 301
+#
+# Template-string leak URLs (e.g. /business/${b.s}) and undefined/null
+# segments are redirected in functions/_middleware.js — ${} in _redirects
+# is unreliable, and .html variants must not fall through to /*.html
+# (that creates a 308→404 chain).
 
 /index.html / 308
 /index.html/ / 308
