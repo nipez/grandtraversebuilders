@@ -173,7 +173,7 @@ function renderWizard(){
           h+=`<div class="wz-step${step.optional?' optional':''}" data-step-id="${step.id}">
             <div class="wz-step-num">${step.icon}</div>
             <div class="wz-step-info"><div class="wz-step-label">${step.label}${step.optional?' <span class="wz-opt">(optional)</span>':''}</div>
-              <a href="${prefix}category/${catSlug}?step=${step.id}" class="wz-step-browse">Browse ${step.label} →</a></div>
+              <a href="${prefix+'category/'+catSlug+'?step='+step.id}" class="wz-step-browse">Browse ${step.label} →</a></div>
             ${addBtn}</div>`;
         }
       });

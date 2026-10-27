@@ -50,3 +50,12 @@ Category pages with fewer than 3 listings are marked `noindex, follow` and omitt
 python3 scripts/thin_category_noindex.py
 python3 scripts/thin_category_noindex.py --verify-only
 ```
+
+### URL status audit (sitemap + historical)
+
+```bash
+python3 scripts/check_urls.py --base https://grandtraversebuilders.com
+python3 scripts/check_urls.py --base https://<preview>.buildnorthernmichigan.pages.dev --fail-on-bad
+```
+
+Uses `sitemap.xml` plus `scripts/historical-urls.txt` (past sitemap locs, `.html` variants, template-leak paths). Expect every sitemap URL → 200, historical URLs → 200 or one 301/308 hop; `/404` stays 404 by design.
