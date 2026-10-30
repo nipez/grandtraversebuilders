@@ -20,7 +20,7 @@ Then open the URL `serve` prints (usually http://localhost:3000).
 - `claim.html` — claim a listing
 - `plan-my-build.html` — project planner
 - `blog/` — guides
-- `business/` — 377 business listing pages
+- `business/` — business listing pages (count from `const businesses` in `index.html`)
 - `category/` — 119 category pages
 - `project.js` — favorites / project planner (localStorage)
 - `style.css` — shared styles
@@ -34,9 +34,26 @@ Then open the URL `serve` prints (usually http://localhost:3000).
 
 Direct Upload originally (not Git-connected). Re-deploy from this repo after connecting the project to GitHub if you want Git-based deploys.
 
-### Regenerating the search index
+### Listing data audit / cleanup
 
-After changing the businesses list in `index.html`:
+Source of truth is `const businesses=[...]` in `index.html`. Audit (and optionally normalize) data quality:
+
+```bash
+python3 scripts/audit_listings.py              # report only
+python3 scripts/audit_listings.py --apply      # fix + sync category arrays, counts, redirects, sitemap
+```
+
+After data changes, rebuild derived artifacts:
+
+```bash
+python3 scripts/build_search_index.py
+python3 scripts/upgrade_business_pages.py
+python3 scripts/inject-static-listings.py
+python3 scripts/thin_category_noindex.py
+python3 scripts/thin_category_noindex.py --verify-only
+```
+
+### Regenerating the search index
 
 ```bash
 python3 scripts/build_search_index.py

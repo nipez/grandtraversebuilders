@@ -43,5 +43,13 @@
 #
 # Trailing slash after .html (e.g. /categories.html/) used to miss the
 # pretty-URL redirect and SPA-fallback to the homepage.
+# Dropped / merged listing slugs (data cleanup) — keep extensionless + .html
+/business/jeff-kuhlman /business/floor-coverings-international-of-northwest-michigan 301
+/business/jeff-kuhlman.html /business/floor-coverings-international-of-northwest-michigan 301
+/business/jeff-kuhlman/ /business/floor-coverings-international-of-northwest-michigan 301
+/business/wausau-supply-co /category/building-materials-wholesale 301
+/business/wausau-supply-co.html /category/building-materials-wholesale 301
+/business/wausau-supply-co/ /category/building-materials-wholesale 301
+
 /*.html/ /:splat 308
 /*.html /:splat 308
