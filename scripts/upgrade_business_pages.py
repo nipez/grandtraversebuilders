@@ -317,6 +317,16 @@ def display_host(url: str) -> str:
         return url
 
 
+def tel_href(phone: str) -> str:
+    """Build a dialable tel: target (E.164 for US 10-digit numbers)."""
+    digits = re.sub(r"\D", "", phone or "")
+    if len(digits) == 10:
+        return f"+1{digits}"
+    if len(digits) == 11 and digits.startswith("1"):
+        return f"+{digits}"
+    return digits or phone
+
+
 def make_title(biz: dict) -> str:
     name = biz["n"]
     trade = primary_trade(biz)
@@ -510,7 +520,7 @@ def sidebar_actions_html(biz: dict) -> str:
     buttons = []
     if biz.get("p"):
         buttons.append(
-            f'<a href="tel:{esc(biz["p"])}" class="sidebar-btn primary">'
+            f'<a href="tel:{esc(tel_href(biz["p"]))}" class="sidebar-btn primary">'
             f'📞 Call {esc_text(biz["p"])}</a>'
         )
     if biz.get("w"):
@@ -547,7 +557,7 @@ def sidebar_info_html(biz: dict) -> str:
     if biz.get("p"):
         items.append(
             f'<li><span class="si-label">Phone</span>'
-            f'<a href="tel:{esc(biz["p"])}">{esc_text(biz["p"])}</a></li>'
+            f'<a href="tel:{esc(tel_href(biz["p"]))}>{esc_text(biz["p"])}</a></li>'
         )
     if biz.get("w"):
         items.append(

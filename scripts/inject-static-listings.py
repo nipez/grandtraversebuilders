@@ -184,34 +184,64 @@ def process_category(path: Path) -> int:
 def process_homepage(path: Path) -> int:
     page = path.read_text(encoding="utf-8")
     businesses = extract_businesses(page)
+    n = len(businesses)
+    builders = sum(
+        1 for b in businesses if "Building Contractors" in (b.get("c") or [])
+    )
     cards = "".join(
         card_html(b, "business/", use_city_field=False) for b in businesses
     )
     page = inject_grid(page, "builderGrid", cards)
 
     # Align default client filter with the full static directory so first paint
-    # matches crawler HTML (All / 377) instead of flashing then filtering.
+    # matches crawler HTML (All / N) instead of flashing then filtering.
     page = page.replace(
         "let currentFilter='Building Contractors',currentSearch='';",
         "let currentFilter='all',currentSearch='';",
         1,
     )
     page = page.replace("let showAll=false;", "let showAll=true;", 1)
+
+    # Idempotent: flip legacy "Home Builders active" chrome if still present,
+    # otherwise just refresh the All / Home Builders counts from live data.
     old_filters = (
         '<button class="filter-btn" onclick="setFilter(\'all\',this)">All'
-        '<span class="count"> (377)</span></button>\n'
+        f'<span class="count"> ({n})</span></button>\n'
         '<button class="filter-btn active" onclick="setFilter(\'Building Contractors\',this)">'
-        'Home Builders<span class="count"> (112)</span></button>'
+        f'Home Builders<span class="count"> ({builders})</span></button>'
+    )
+    # Also match whatever prior count was baked in.
+    old_filters_any = re.compile(
+        r'<button class="filter-btn" onclick="setFilter\(\'all\',this\)">All'
+        r'<span class="count"> \(\d+\)</span></button>\n'
+        r'<button class="filter-btn active" onclick="setFilter\(\'Building Contractors\',this\)">'
+        r'Home Builders<span class="count"> \(\d+\)</span></button>'
     )
     new_filters = (
         '<button class="filter-btn active" onclick="setFilter(\'all\',this)">All'
-        '<span class="count"> (377)</span></button>\n'
+        f'<span class="count"> ({n})</span></button>\n'
         '<button class="filter-btn" onclick="setFilter(\'Building Contractors\',this)">'
-        'Home Builders<span class="count"> (112)</span></button>'
+        f'Home Builders<span class="count"> ({builders})</span></button>'
     )
-    if old_filters not in page:
-        raise RuntimeError("index.html: could not find default filter buttons to update")
-    page = page.replace(old_filters, new_filters, 1)
+    if old_filters in page:
+        page = page.replace(old_filters, new_filters, 1)
+    elif old_filters_any.search(page):
+        page = old_filters_any.sub(new_filters, page, count=1)
+    else:
+        # Already using All-as-default; refresh counts in place.
+        page = re.sub(
+            r'(onclick="setFilter\(\'all\',this\)">All<span class="count"(?: id="allFilterCount")?>)\s*\(\d+\)',
+            rf"\g<1>({n})",
+            page,
+            count=1,
+        )
+        page = re.sub(
+            r'(onclick="setFilter\(\'Building Contractors\',this\)">Home Builders'
+            r'<span class="count">)\s*\(\d+\)',
+            rf"\g<1>({builders})",
+            page,
+            count=1,
+        )
 
     if "<body" not in page or "const businesses=" not in page:
         raise RuntimeError("index.html: injection corrupted page structure")
@@ -222,13 +252,15 @@ def process_homepage(path: Path) -> int:
 
 
 def verify() -> None:
+    # Expected counts come from each page's own embedded array (source of truth).
     samples = [
-        ("category/building-contractors.html", 112),
-        ("category/roofing.html", 13),
-        ("category/kitchen-bath.html", 15),
+        "category/building-contractors.html",
+        "category/roofing.html",
+        "category/kitchen-bath.html",
     ]
-    for rel, expected in samples:
+    for rel in samples:
         page = (ROOT / rel).read_text(encoding="utf-8")
+        expected = len(extract_businesses(page))
         body = page[page.find("<body") :]
         body_noscript = re.sub(r"<script\b[\s\S]*?</script>", "", body)
         hrefs = len(re.findall(r'href="[^"]*business/', body_noscript))
@@ -245,16 +277,17 @@ def verify() -> None:
             raise SystemExit(f"verification failed for {rel}")
 
     page = (ROOT / "index.html").read_text(encoding="utf-8")
+    expected = len(extract_businesses(page))
     body = page[page.find("<body") :]
     body_noscript = re.sub(r"<script\b[\s\S]*?</script>", "", body)
     hrefs = len(re.findall(r'href="[^"]*business/', body_noscript))
     has_all_filter = "let currentFilter='all'" in page
     has_show_all = "let showAll=true;" in page
     print(
-        f"VERIFY index.html: static hrefs={hrefs}, "
+        f"VERIFY index.html: static hrefs={hrefs} (expect {expected}), "
         f"currentFilter all={has_all_filter}, showAll={has_show_all}"
     )
-    if hrefs < 377:
+    if hrefs < expected:
         raise SystemExit("verification failed for index.html")
 
 

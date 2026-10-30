@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-30",
+  "before_count": 377,
+  "after_count": 375,
+  "before_issues": {
+    "stolen_contact": 14,
+    "empty_categories": 1,
+    "duplicate_merge": 1,
+    "address_normalize": 5,
+    "name_all_caps": 2,
+    "out_of_state": 1,
+    "remove_out_of_area": 1
+  },
+  "after_issues": {},
+  "dropped": [
+    "jeff-kuhlman",
+    "wausau-supply-co"
+  ],
+  "redirects": {
+    "/business/jeff-kuhlman": "/business/floor-coverings-international-of-northwest-michigan",
+    "/business/wausau-supply-co": "/category/building-materials-wholesale"
+  },
+  "borderline": [
+    {
+      "kind": "shared_phone",
+      "slug": "bac-design-group,bay-area-contracting-inc",
+      "detail": "phone 231-941-0014: ['BAC Design Group', 'Bay Area Contracting, Inc']"
+    },
+    {
+      "kind": "shared_phone",
+      "slug": "david-webster-construction,dovetail-custom-cabinetry",
+      "detail": "phone 231-941-7073: ['David Webster Construction', 'Dovetail Custom Cabinetry']"
+    },
+    {
+      "kind": "shared_phone",
+      "slug": "elya-construction-co,elya-development-co",
+      "detail": "phone 231-499-6904: ['Elya Construction Co.', 'Elya Development Co']"
+    },
+    {
+      "kind": "shared_phone",
+      "slug": "krista-esckilsen,wm",
+      "detail": "phone 231-942-2713: ['Krista Esckilsen', 'WM']"
+    },
+    {
+      "kind": "shared_website",
+      "slug": "elya-construction-co,elya-development-co",
+      "detail": "elyaconstructionco.com: ['Elya Construction Co.', 'Elya Development Co']"
+    },
+    {
+      "kind": "shared_website",
+      "slug": "tc-millworks,2nd-gen-drywall-llc,traverse-connect",
+      "detail": "facebook.com: ['TC Millworks', '2nd Gen Drywall, LLC', 'Traverse Connect']"
+    },
+    {
+      "kind": "related_co_located",
+      "slug": "david-webster-construction,dovetail-custom-cabinetry",
+      "detail": "Same phone+address, different websites/names — likely related shops; keep both"
+    },
+    {
+      "kind": "related_sister_company",
+      "slug": "elya-construction-co,elya-development-co",
+      "detail": "Same phone+website+address; Construction vs Land Developers — keep both"
+    },
+    {
+      "kind": "shared_phone_person",
+      "slug": "krista-esckilsen,wm",
+      "detail": "Same phone; Krista may be a WM contact person — review before merging"
+    },
+    {
+      "kind": "shared_phone_only",
+      "slug": "bac-design-group,bay-area-contracting-inc",
+      "detail": "Same phone, different websites/addresses — review"
+    },
+    {
+      "kind": "co_located_address_only",
+      "slug": "a-better-sound,mac-custom-homes",
+      "detail": "Same address, different phones — co-located; keep both"
+    }
+  ]
+}
