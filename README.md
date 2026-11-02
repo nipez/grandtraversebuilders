@@ -51,6 +51,7 @@ python3 scripts/upgrade_business_pages.py
 python3 scripts/inject-static-listings.py
 python3 scripts/thin_category_noindex.py
 python3 scripts/thin_category_noindex.py --verify-only
+python3 scripts/update_sitemap_lastmod.py
 ```
 
 ### Regenerating the search index
@@ -67,6 +68,17 @@ Category pages with fewer than 3 listings are marked `noindex, follow` and omitt
 python3 scripts/thin_category_noindex.py
 python3 scripts/thin_category_noindex.py --verify-only
 ```
+
+### Sitemap lastmod dates
+
+`sitemap.xml` `<lastmod>` values are derived from git history of each URL’s HTML source (skipping directory-wide listing-count chrome so audit-only count bumps don’t rewrite every date). Re-run after content or listing rebuilds:
+
+```bash
+python3 scripts/update_sitemap_lastmod.py
+python3 scripts/update_sitemap_lastmod.py --dry-run
+```
+
+On shallow clones (e.g. Cloudflare Pages), the script deepens history when possible and keeps the existing `<lastmod>` when a file has no usable history — it never stamps today’s date as a fallback.
 
 ### URL status audit (sitemap + historical)
 
