@@ -16,6 +16,7 @@ sitemap business URLs. After apply, re-run the usual rebuild chain:
   python3 scripts/inject-static-listings.py
   python3 scripts/thin_category_noindex.py
   python3 scripts/thin_category_noindex.py --verify-only
+  python3 scripts/update_sitemap_lastmod.py
 """
 from __future__ import annotations
 
