@@ -12,6 +12,9 @@
  *
  * Note: unmatched paths already receive 404.html with status 404 automatically.
  * _redirects still handles .html→extensionless, umlaut slugs, /category, etc.
+ *
+ * IndexNow key file (/07a8cebdaa07da33e0ad820b1a1ec2de.txt) must pass through
+ * untouched as a static asset (text/plain 200). Do not redirect or rewrite it.
  */
 
 const TEMPLATE_LEAK_REDIRECTS = new Map([
@@ -41,10 +44,17 @@ function decodePathname(pathname) {
   }
 }
 
+const INDEXNOW_KEY_PATH = "/07a8cebdaa07da33e0ad820b1a1ec2de.txt";
+
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const pathname = url.pathname;
   const decoded = decodePathname(pathname);
+
+  // IndexNow ownership proof — static text/plain 200; never redirect/rewrite.
+  if (pathname === INDEXNOW_KEY_PATH) {
+    return context.next();
+  }
 
   if (pathname === "/404" || pathname === "/404.html") {
     const asset = await context.env.ASSETS.fetch(

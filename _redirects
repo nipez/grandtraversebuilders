@@ -4,6 +4,9 @@
 # Static rules first: a greedy /*.html splat would wrongly map
 # /index.html → /index instead of /.
 #
+# IndexNow key file: /07a8cebdaa07da33e0ad820b1a1ec2de.txt must remain a
+# static 200 text/plain response at the site root — never redirect it.
+#
 # ASCII slug migration for umlaut business pages (NFC + NFD + .html).
 # Use percent-encoded sources so NFC (%C3%B6 / %C3%A4) and NFD (%CC%88)
 # stay distinct; Pages normalizes literal Unicode to the same encodings.

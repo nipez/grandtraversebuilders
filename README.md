@@ -80,6 +80,33 @@ python3 scripts/update_sitemap_lastmod.py --dry-run
 
 On shallow clones (e.g. Cloudflare Pages), the script deepens history when possible and keeps the existing `<lastmod>` when a file has no usable history — it never stamps today’s date as a fallback.
 
+### IndexNow (search engine URL submission)
+
+After each push to `main`, Cloudflare Pages deploys the static site, then the GitHub Actions workflow [`.github/workflows/indexnow.yml`](.github/workflows/indexnow.yml) waits until production is live and submits **new or changed** sitemap URLs to [IndexNow](https://www.indexnow.org/) (`https://api.indexnow.org/indexnow`).
+
+- **Key file (public by design):** [`/07a8cebdaa07da33e0ad820b1a1ec2de.txt`](https://grandtraversebuilders.com/07a8cebdaa07da33e0ad820b1a1ec2de.txt) — body is only the key; served as `text/plain`.
+- **Script:** `scripts/indexnow_submit.py` (Python standard library only). Diffs `sitemap.xml` `<loc>` / `<lastmod>` against the previous commit by default; supports `--all`, `--urls`, and `--dry-run`.
+- **Weekly SEO articles:** new blog posts are added to `sitemap.xml` (and get a `<lastmod>` from `scripts/update_sitemap_lastmod.py`), so the post-deploy sitemap-diff step submits them automatically — no extra wiring.
+- The workflow needs **no secrets**. A non-2xx IndexNow response is logged as a warning and never fails the deploy.
+
+```bash
+python3 scripts/indexnow_submit.py --dry-run
+python3 scripts/indexnow_submit.py --dry-run HEAD~1
+python3 scripts/indexnow_submit.py --all --dry-run
+python3 scripts/indexnow_submit.py --urls https://grandtraversebuilders.com/about --dry-run
+```
+
+Rebuild chain reminder (listing/content changes → derived artifacts → sitemap dates → IndexNow on next `main` deploy):
+
+```bash
+python3 scripts/build_search_index.py
+python3 scripts/upgrade_business_pages.py
+python3 scripts/inject-static-listings.py
+python3 scripts/thin_category_noindex.py
+python3 scripts/update_sitemap_lastmod.py
+# push to main → Cloudflare Pages deploy → IndexNow workflow submits sitemap diff
+```
+
 ### URL status audit (sitemap + historical)
 
 ```bash

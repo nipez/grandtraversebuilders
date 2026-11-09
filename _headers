@@ -12,3 +12,8 @@
 
 /project.js
   Cache-Control: public, max-age=3600
+
+# IndexNow key ownership file (must be text/plain 200 at site root).
+/07a8cebdaa07da33e0ad820b1a1ec2de.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600

@@ -1,0 +1,122 @@
+# Submit new/changed sitemap URLs to IndexNow after main is live on
+# Cloudflare Pages. Runs outside the Pages build so it waits until the
+# production site actually reflects this commit. The IndexNow key is
+# public by design — no repository secrets are required.
+#
+# This workflow must never fail the deploy: IndexNow errors are warnings
+# only (continue-on-error + the script exits 0 on non-2xx).
+
+name: IndexNow submit
+
+on:
+  push:
+    branches: [main]
+
+# Do not cancel in-progress submits on rapid pushes; each commit's
+# sitemap diff is independent and IndexNow is idempotent.
+concurrency:
+  group: indexnow-main
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    name: Wait for live deploy, then IndexNow
+    runs-on: ubuntu-latest
+    # Soft-fail at the job level so a red X never blocks main.
+    continue-on-error: true
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          # Need prior commit(s) so sitemap.xml can be diffed.
+          fetch-depth: 0
+
+      - name: Wait until production reflects this deploy
+        id: wait
+        env:
+          KEY: "07a8cebdaa07da33e0ad820b1a1ec2de"
+          LIVE_HOST: "https://grandtraversebuilders.com"
+          # github.event.before is the SHA tip of main before this push
+          # (all zeros on the first-ever push to a new repo).
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          set +e
+          KEY_URL="${LIVE_HOST}/${KEY}.txt"
+          SITEMAP_URL="${LIVE_HOST}/sitemap.xml"
+          LOCAL_SITEMAP_HASH="$(sha256sum sitemap.xml | awk '{print $1}')"
+          SITEMAP_CHANGED=0
+          if [ -n "${BEFORE_SHA}" ] && ! echo "${BEFORE_SHA}" | grep -Eq '^0+$'; then
+            if ! git cat-file -e "${BEFORE_SHA}:sitemap.xml" 2>/dev/null; then
+              SITEMAP_CHANGED=1
+            elif ! git diff --quiet "${BEFORE_SHA}" HEAD -- sitemap.xml; then
+              SITEMAP_CHANGED=1
+            fi
+          else
+            # No usable prior SHA — wait for key + full sitemap match.
+            SITEMAP_CHANGED=1
+          fi
+
+          echo "Waiting for live site (key file always; sitemap match if changed=${SITEMAP_CHANGED})"
+          echo "Expected key URL: ${KEY_URL}"
+          echo "Local sitemap sha256: ${LOCAL_SITEMAP_HASH}"
+
+          # Cloudflare Pages deploys usually finish within a few minutes.
+          # Poll for up to ~20 minutes (80 * 15s).
+          READY=0
+          for i in $(seq 1 80); do
+            KEY_BODY="$(curl -fsS --max-time 20 "${KEY_URL}" 2>/dev/null || true)"
+            KEY_OK=0
+            if [ "${KEY_BODY}" = "${KEY}" ]; then
+              KEY_OK=1
+            fi
+
+            SITEMAP_OK=1
+            if [ "${SITEMAP_CHANGED}" = "1" ]; then
+              SITEMAP_OK=0
+              REMOTE_HASH="$(curl -fsS --max-time 20 "${SITEMAP_URL}" 2>/dev/null | sha256sum | awk '{print $1}' || true)"
+              if [ -n "${REMOTE_HASH}" ] && [ "${REMOTE_HASH}" = "${LOCAL_SITEMAP_HASH}" ]; then
+                SITEMAP_OK=1
+              fi
+            fi
+
+            if [ "${KEY_OK}" = "1" ] && [ "${SITEMAP_OK}" = "1" ]; then
+              echo "Live site is ready (attempt ${i})."
+              READY=1
+              break
+            fi
+
+            echo "Not ready yet (attempt ${i}/80; key_ok=${KEY_OK} sitemap_ok=${SITEMAP_OK}); sleeping 15s…"
+            sleep 15
+          done
+
+          if [ "${READY}" != "1" ]; then
+            echo "::warning::Timed out waiting for Cloudflare Pages production to reflect this commit; skipping IndexNow submit."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+          # Preserve BEFORE_SHA for the submit step.
+          echo "before_sha=${BEFORE_SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Submit changed sitemap URLs to IndexNow
+        if: steps.wait.outputs.ready == 'true'
+        env:
+          BEFORE_SHA: ${{ steps.wait.outputs.before_sha }}
+        run: |
+          set +e
+          REF_ARGS=()
+          if [ -n "${BEFORE_SHA}" ] && ! echo "${BEFORE_SHA}" | grep -Eq '^0+$'; then
+            if git rev-parse --verify "${BEFORE_SHA}^{commit}" >/dev/null 2>&1; then
+              REF_ARGS=("${BEFORE_SHA}")
+            fi
+          fi
+
+          echo "Running: python3 scripts/indexnow_submit.py ${REF_ARGS[*]:-}"
+          python3 scripts/indexnow_submit.py "${REF_ARGS[@]}"
+          status=$?
+          if [ "$status" -ne 0 ]; then
+            echo "::warning::indexnow_submit.py exited with status ${status} (deploy is unaffected)."
+          fi
+          # Never fail the workflow on IndexNow issues.
+          exit 0
