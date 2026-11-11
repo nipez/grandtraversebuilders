@@ -30,7 +30,7 @@ SITEMAP = ROOT / "sitemap.xml"
 # shortlist for a directory page.
 THIN_THRESHOLD = 3
 
-# SEO-upgraded trade pages (PRs #19–#21) — always keep indexable.
+# SEO-upgraded trade pages — always keep indexable (PRs #19–#21 + high-intent set).
 ALWAYS_INDEXABLE = frozenset(
     {
         "roofing",
@@ -48,6 +48,17 @@ ALWAYS_INDEXABLE = frozenset(
         "insulation-contractors-installers",
         "plumbing-contractors",
         "pole-buildings-garages",
+        # High-intent thin categories upgraded with real SEO content
+        "well-drilling",
+        "septic-pumping",
+        "seawalls",
+        "survey-services",
+        "civil-engineering",
+        "environmental-testing-consulting",
+        "masonry-contractors",
+        "fencing",
+        "log-home-builders",
+        "home-inspection-services",
     }
 )
 
@@ -246,8 +257,23 @@ def apply_category(info: CategoryInfo) -> tuple[bool, bool]:
     return changed, thin
 
 
-def update_sitemap(noindex_slugs: set[str]) -> tuple[int, int]:
-    """Remove noindexed category URLs from sitemap. Returns (removed, remaining cats)."""
+def sitemap_category_entry(slug: str, lastmod: str = "2026-03-07") -> str:
+    return (
+        f"<url><loc>{SITE}/category/{slug}</loc>"
+        f"<lastmod>{lastmod}</lastmod>"
+        f"<changefreq>weekly</changefreq>"
+        f"<priority>0.7</priority></url>\n"
+    )
+
+
+def update_sitemap(
+    noindex_slugs: set[str], indexable_slugs: set[str]
+) -> tuple[int, int, int]:
+    """Sync category URLs in sitemap with indexability.
+
+    Removes noindexed category URLs and restores any missing indexable ones.
+    Returns (removed, added, remaining cats).
+    """
     text = SITEMAP.read_text(encoding="utf-8")
     original = text
     removed = 0
@@ -259,12 +285,35 @@ def update_sitemap(noindex_slugs: set[str]) -> tuple[int, int]:
         )
         text, n = pat.subn("", text, count=1)
         removed += n
+
+    added = 0
+    for slug in sorted(indexable_slugs):
+        loc = f"{SITE}/category/{slug}"
+        if loc in text:
+            continue
+        # Insert among category URL blocks: after the last existing category entry.
+        entry = sitemap_category_entry(slug)
+        cat_blocks = list(
+            re.finditer(
+                rf"<url><loc>{re.escape(SITE)}/category/[^<]+</loc>.*?</url>\n?",
+                text,
+                re.S,
+            )
+        )
+        if cat_blocks:
+            insert_at = cat_blocks[-1].end()
+            text = text[:insert_at] + entry + text[insert_at:]
+        else:
+            # Fallback: before </urlset>
+            text = text.replace("</urlset>", entry + "</urlset>", 1)
+        added += 1
+
     # Collapse accidental blank runs left by removals (keep single newlines)
     text = re.sub(r"\n{3,}", "\n\n", text)
     if text != original:
         SITEMAP.write_text(text, encoding="utf-8")
     remaining = len(re.findall(rf"{re.escape(SITE)}/category/", text))
-    return removed, remaining
+    return removed, added, remaining
 
 
 def has_noindex(page: str) -> bool:
@@ -415,10 +464,12 @@ def main() -> None:
         if is_thin:
             noindex_slugs.add(info.slug)
 
-    removed, remaining_cats = update_sitemap(noindex_slugs)
+    indexable_slugs = {info.slug for info in rows if info.indexable}
+    removed, added, remaining_cats = update_sitemap(noindex_slugs, indexable_slugs)
     print(
         f"\nUpdated {changed} category page(s); "
         f"removed {removed} URL(s) from sitemap; "
+        f"added {added} URL(s) to sitemap; "
         f"{remaining_cats} category URLs remain in sitemap"
     )
     verify(inventory())
