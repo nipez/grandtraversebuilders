@@ -62,7 +62,7 @@ python3 scripts/build_search_index.py
 
 ### Thin category noindex
 
-Category pages with fewer than 3 listings are marked `noindex, follow` and omitted from `sitemap.xml` (15 SEO-upgraded trades always stay indexable). After listing data changes:
+Category pages with fewer than 3 listings are marked `noindex, follow` and omitted from `sitemap.xml` (25 SEO-upgraded trades always stay indexable). After listing data changes:
 
 ```bash
 python3 scripts/thin_category_noindex.py
