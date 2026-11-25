@@ -265,7 +265,7 @@ nav.scrolled{box-shadow:0 2px 30px rgba(28,43,54,0.08);}
   .featured-promo{padding:24px 20px;}
 }
 .cat-about-inner{max-width:800px;margin:0 auto;}
-.cat-about-inner h2{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--slate);margin-bottom:16px;}
+.cat-about-inner h2{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--slate);margin-bottom:16px;}.cat-about-inner h3{font-family:'DM Sans',sans-serif;font-size:1.02rem;font-weight:600;color:var(--slate);margin:26px 0 10px;letter-spacing:.01em;}
 .cat-about-inner p{font-size:1rem;color:var(--text-light);line-height:1.8;margin-bottom:14px;}
 .cat-about-inner a{color:var(--copper-warm);text-decoration:underline;text-underline-offset:2px;}
 /* Project Gallery */
