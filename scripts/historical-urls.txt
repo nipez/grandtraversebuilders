@@ -26,6 +26,8 @@
 /traverse-city-home-builders.html
 /about/
 /blog/
+/blog/book-contractors-spring-traverse-city
+/blog/book-contractors-spring-traverse-city.html
 /blog/building-on-waterfront-property-grand-traverse-county
 /blog/building-on-waterfront-property-grand-traverse-county.html
 /blog/building-permits-grand-traverse-county-guide
@@ -45,6 +47,8 @@
 /blog/traverse-city-new-home-construction-guide.html
 /blog/when-to-start-building-northern-michigan-seasonal-guide
 /blog/when-to-start-building-northern-michigan-seasonal-guide.html
+/blog/winter-remodeling-traverse-city
+/blog/winter-remodeling-traverse-city.html
 /business/
 /business/${b.s}
 /business/${b.s}.html
@@ -1067,6 +1071,7 @@
 /privacy/
 /search/
 /traverse-city-home-builders/
+/blog/book-contractors-spring-traverse-city/
 /blog/building-permits-grand-traverse-county-guide/
 /blog/choosing-a-home-builder-traverse-city-what-to-look-for/
 /blog/general-contractor-traverse-city/
@@ -1075,6 +1080,7 @@
 /blog/luxury-custom-home-builders-traverse-city/
 /blog/traverse-city-new-home-construction-guide/
 /blog/when-to-start-building-northern-michigan-seasonal-guide/
+/blog/winter-remodeling-traverse-city/
 /business/2nd-gen-drywall-llc/
 /business/45th-parallel-rehabilitation/
 /business/45th-property-power-llc/
